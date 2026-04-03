@@ -13,9 +13,9 @@ export async function onRequest(context) {
   }
 
   try {
-    const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = context.env;
+    const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = context.env;
 
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
       return new Response(JSON.stringify({ 
         error: 'Supabase configuration missing',
         connected: false 
@@ -28,8 +28,8 @@ export async function onRequest(context) {
     // Check if WhatsApp session exists in database
     const response = await fetch(`${SUPABASE_URL}/rest/v1/whatsapp_sessions?is_active=eq.true&select=*`, {
       headers: {
-        'apikey': SUPABASE_SERVICE_KEY,
-        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'apikey': SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json'
       }
     });

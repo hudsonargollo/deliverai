@@ -21,7 +21,7 @@ Most endpoints require authentication via Supabase. The service uses:
 
 Required environment variables:
 - `VITE_SUPABASE_URL`: Supabase project URL
-- `SUPABASE_SERVICE_KEY`: Supabase service role key (server-side only)
+- `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (server-side only)
 - `VITE_MERCADOPAGO_ACCESS_TOKEN`: MercadoPago API access token
 
 ---

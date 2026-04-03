@@ -16,7 +16,7 @@ const TAG_LENGTH = 16;
  */
 function initSupabase(env) {
   const supabaseUrl = env?.SUPABASE_URL;
-  const supabaseServiceKey = env?.SUPABASE_SERVICE_KEY;
+  const supabaseServiceKey = env?.SUPABASE_SERVICE_ROLE_KEY;
   
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error('Missing Supabase configuration');
@@ -56,9 +56,9 @@ async function getEncryptionKey(env) {
 /**
  * Encrypt session data using Web Crypto API
  */
-async function encryptSessionData(data) {
+async function encryptSessionData(data, env) {
   try {
-    const key = await getEncryptionKey();
+    const key = await getEncryptionKey(env);
     const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
     
     const jsonData = JSON.stringify(data);
@@ -91,9 +91,9 @@ async function encryptSessionData(data) {
 /**
  * Decrypt session data using Web Crypto API
  */
-async function decryptSessionData(encryptedHex) {
+async function decryptSessionData(encryptedHex, env) {
   try {
-    const key = await getEncryptionKey();
+    const key = await getEncryptionKey(env);
     
     // Convert hex string back to Uint8Array
     const encryptedData = new Uint8Array(
@@ -128,12 +128,12 @@ async function decryptSessionData(encryptedHex) {
 /**
  * Save session data to database
  */
-export async function saveSessionToDatabase(sessionId, sessionData, phoneNumber = null) {
+export async function saveSessionToDatabase(sessionId, sessionData, phoneNumber = null, env) {
   try {
-    const supabase = initSupabase();
+    const supabase = initSupabase(env);
     
     // Encrypt the session data
-    const encryptedData = await encryptSessionData(sessionData);
+    const encryptedData = await encryptSessionData(sessionData, env);
     
     // Upsert session data
     const { data, error } = await supabase
@@ -166,9 +166,9 @@ export async function saveSessionToDatabase(sessionId, sessionData, phoneNumber 
 /**
  * Load session data from database
  */
-export async function loadSessionFromDatabase(sessionId) {
+export async function loadSessionFromDatabase(sessionId, env) {
   try {
-    const supabase = initSupabase();
+    const supabase = initSupabase(env);
     
     const { data, error } = await supabase
       .from('whatsapp_sessions')
@@ -193,7 +193,7 @@ export async function loadSessionFromDatabase(sessionId) {
     }
     
     // Decrypt the session data
-    const decryptedData = await decryptSessionData(data.session_data.encrypted);
+    const decryptedData = await decryptSessionData(data.session_data.encrypted, env);
     
     console.log('Session loaded successfully:', { sessionId, phoneNumber: data.phone_number });
     return {
@@ -211,9 +211,9 @@ export async function loadSessionFromDatabase(sessionId) {
 /**
  * Clear session data from database
  */
-export async function clearSessionFromDatabase(sessionId) {
+export async function clearSessionFromDatabase(sessionId, env) {
   try {
-    const supabase = initSupabase();
+    const supabase = initSupabase(env);
     
     const { error } = await supabase
       .from('whatsapp_sessions')
@@ -238,9 +238,9 @@ export async function clearSessionFromDatabase(sessionId) {
 /**
  * Get all active sessions
  */
-export async function getActiveSessions() {
+export async function getActiveSessions(env) {
   try {
-    const supabase = initSupabase();
+    const supabase = initSupabase(env);
     
     const { data, error } = await supabase
       .from('whatsapp_sessions')
@@ -263,14 +263,14 @@ export async function getActiveSessions() {
 /**
  * Custom auth state implementation for Baileys with database persistence
  */
-export function createDatabaseAuthState(sessionId) {
+export function createDatabaseAuthState(sessionId, env) {
   let creds = null;
   let keys = {};
   
   // Load existing session data
   const loadSession = async () => {
     try {
-      const sessionData = await loadSessionFromDatabase(sessionId);
+      const sessionData = await loadSessionFromDatabase(sessionId, env);
       if (sessionData) {
         creds = sessionData.sessionData.creds || null;
         keys = sessionData.sessionData.keys || {};
@@ -294,7 +294,7 @@ export function createDatabaseAuthState(sessionId) {
       };
       
       const phoneNumber = creds?.me?.id ? creds.me.id.split(':')[0] : null;
-      await saveSessionToDatabase(sessionId, sessionData, phoneNumber);
+      await saveSessionToDatabase(sessionId, sessionData, phoneNumber, env);
       console.log('Saved session to database:', { sessionId, phoneNumber });
     } catch (error) {
       console.error('Failed to save session:', error);
@@ -330,7 +330,7 @@ export function createDatabaseAuthState(sessionId) {
       saveSession();
     },
     loadSession,
-    clearSession: () => clearSessionFromDatabase(sessionId)
+    clearSession: () => clearSessionFromDatabase(sessionId, env)
   };
 }
 

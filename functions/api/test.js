@@ -13,7 +13,7 @@ export async function onRequest(context) {
 
   const envCheck = {
     hasSupabaseUrl: !!context.env.SUPABASE_URL,
-    hasSupabaseKey: !!context.env.SUPABASE_SERVICE_KEY,
+    hasSupabaseKey: !!context.env.SUPABASE_SERVICE_ROLE_KEY,
     hasWhatsAppKey: !!context.env.WHATSAPP_ENCRYPTION_KEY,
     timestamp: new Date().toISOString(),
     message: 'Cloudflare Functions are working!'

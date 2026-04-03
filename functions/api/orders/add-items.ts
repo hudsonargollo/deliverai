@@ -13,7 +13,7 @@ type PagesFunction<Env = unknown> = (context: {
 
 interface Env {
   VITE_SUPABASE_URL: string;
-  SUPABASE_SERVICE_KEY: string;
+  SUPABASE_SERVICE_ROLE_KEY: string;
 }
 
 interface AddItemsRequest {
@@ -79,7 +79,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     const supabaseUrl = context.env.VITE_SUPABASE_URL;
-    const serviceRoleKey = context.env.SUPABASE_SERVICE_KEY;
+    const serviceRoleKey = context.env.SUPABASE_SERVICE_ROLE_KEY;
 
     // Fetch order from database
     const orderResponse = await fetch(

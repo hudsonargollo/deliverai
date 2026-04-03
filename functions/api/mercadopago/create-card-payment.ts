@@ -13,7 +13,7 @@ type PagesFunction<Env = unknown> = (context: {
 interface Env {
   VITE_MERCADOPAGO_ACCESS_TOKEN: string;
   VITE_SUPABASE_URL: string;
-  SUPABASE_SERVICE_KEY: string;
+  SUPABASE_SERVICE_ROLE_KEY: string;
 }
 
 // Request interface
@@ -383,7 +383,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // Update order in database
     const supabaseUrl = context.env.VITE_SUPABASE_URL;
-    const serviceRoleKey = context.env.SUPABASE_SERVICE_KEY;
+    const serviceRoleKey = context.env.SUPABASE_SERVICE_ROLE_KEY;
 
     let orderStatus = 'pending_payment';
     let paymentConfirmedAt: string | null = null;
