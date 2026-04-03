@@ -6,8 +6,8 @@ pages_build_output_dir = "dist"
 # Environment variables (available at build time and runtime)
 [vars]
 # Frontend environment variables
-VITE_SUPABASE_URL = "https://sntxekdwdllwkszclpiq.supabase.co"
-VITE_SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNudHhla2R3ZGxsd2tzemNscGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyMDQ1ODksImV4cCI6MjA3Nzc4MDU4OX0.aPQeASkYkf7jl3Sl-1GFHH7B8VU-pOtn5sYJKMs9u8I"
+VITE_SUPABASE_URL = "https://lxggnytlyzsoewdgahet.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4Z2dueXRseXpzb2V3ZGdhaGV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMzk0MDcsImV4cCI6MjA5MDgxNTQwN30.fVRtSBcTOLRStcECqDcY7tuYb4qXvfLM3ahlpcdygro"
 
 # MercadoPago Configuration (PIX and Credit Card Payments)
 # Public key is used by Payment Brick SDK for credit card tokenization
@@ -21,8 +21,8 @@ VITE_EVOLUTION_API_KEY = "DD451E404240-4C45-AF35-BFCA6A976927"
 VITE_EVOLUTION_INSTANCE_NAME = "cocooo"
 
 # Server-side environment variables (for Cloudflare Functions)
-SUPABASE_URL = "https://sntxekdwdllwkszclpiq.supabase.co"
-SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNudHhla2R3ZGxsd2tzemNscGlxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjIwNDU4OSwiZXhwIjoyMDc3NzgwNTg5fQ.I5R498LlD6rohVRHh2nyWzKQIgzvfPRdC1nfNRLwBn0"
+SUPABASE_URL = "https://lxggnytlyzsoewdgahet.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4Z2dueXRseXpzb2V3ZGdhaGV0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTIzOTQwNywiZXhwIjoyMDkwODE1NDA3fQ.s9i2yFse_I8D_TFPbBxZEFlrBRaI0R2eDL71C8Ka6zs"
 
 # MercadoPago Access Token (for payment processing in Cloudflare Functions)
 # Used by /api/mercadopago/create-card-payment endpoint
