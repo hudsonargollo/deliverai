@@ -27,6 +27,7 @@ import { SortingDialog } from '@/components/SortingDialog';
 import { CategoryManagement } from '@/components/CategoryManagement';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { UniformHeader } from '@/components/UniformHeader';
+import { ProductOptionsManager } from '@/components/ProductOptionsManager';
 
 interface MenuItem {
   id: string;
@@ -521,14 +522,22 @@ const AdminProducts = () => {
 
       {/* Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingItem ? 'Editar Produto' : 'Novo Produto'}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
+          <Tabs defaultValue="basic" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="basic">Informações Básicas</TabsTrigger>
+              <TabsTrigger value="options" disabled={!editingItem}>
+                Opções e Complementos
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="basic" className="space-y-4 py-4">
             {/* Image Upload */}
             <div className="space-y-2">
               <Label>Foto do Produto</Label>
@@ -626,7 +635,17 @@ const AdminProducts = () => {
                 Produto disponível para venda
               </Label>
             </div>
-          </div>
+            </TabsContent>
+
+            <TabsContent value="options" className="py-4">
+              {editingItem && (
+                <ProductOptionsManager 
+                  menuItemId={editingItem.id}
+                  menuItemName={editingItem.name}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
 
           <DialogFooter>
             <Button

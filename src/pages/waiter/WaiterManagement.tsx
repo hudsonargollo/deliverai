@@ -83,7 +83,7 @@ const WaiterManagement = () => {
       
       if (error) {
         console.error("❌ API error:", error);
-        toast.error(error.message || "Erro ao carregar lista de garçons");
+        toast.error(error.message || "Erro ao carregar lista da equipe");
         setWaiters([]);
         return;
       }
@@ -93,7 +93,7 @@ const WaiterManagement = () => {
       
     } catch (error) {
       console.error("❌ Error fetching waiters:", error);
-      toast.error("Erro de conexão ao carregar lista de garçons");
+      toast.error("Erro de conexão ao carregar lista da equipe");
       setWaiters([]);
     } finally {
       setLoading(false);
@@ -340,7 +340,7 @@ const WaiterManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       <UniformHeader
-        title="Garçons"
+        title="Equipe"
       />
 
       <div className="max-w-7xl mx-auto p-3 sm:p-6">
@@ -371,11 +371,11 @@ const WaiterManagement = () => {
                 <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                   <div className="flex items-center">
                     <Users className="w-5 h-5 mr-2 text-purple-600" />
-                    <span>Equipe de Garçons</span>
+                    <span>Equipe de Atendimento</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs sm:text-sm">
-                      {waiters.length} {waiters.length === 1 ? 'garçom' : 'garçons'}
+                      {waiters.length} {waiters.length === 1 ? 'membro' : 'membros'}
                     </Badge>
                     {loading && <Loader2 className="w-4 h-4 animate-spin text-purple-600" />}
                   </div>
@@ -385,7 +385,7 @@ const WaiterManagement = () => {
                 {loading ? (
                   <div className="text-center py-8 sm:py-12">
                     <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
-                    <p className="text-sm sm:text-base text-gray-600">Carregando lista de garçons...</p>
+                    <p className="text-sm sm:text-base text-gray-600">Carregando lista da equipe...</p>
                   </div>
                 ) : waiters.length === 0 ? (
                   <div className="text-center py-8 sm:py-12 px-4">

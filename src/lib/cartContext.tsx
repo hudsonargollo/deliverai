@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { SelectedOption } from '@/types/product-options';
 
 export interface CartItem {
   id: string;
@@ -8,6 +9,7 @@ export interface CartItem {
   category_id: string;
   available: boolean;
   quantity: number;
+  selectedOptions?: SelectedOption[];
 }
 
 interface CartState {

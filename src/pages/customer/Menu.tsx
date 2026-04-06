@@ -19,7 +19,10 @@ import { useMenuSorting } from "@/hooks/useMenuSorting";
 import { SortingToggle } from "@/components/SortingToggle";
 import { SortableProductList } from "@/components/SortableProductList";
 import { DraggableProductCard } from "@/components/DraggableProductCard";
-import logo from "@/assets/coco-loko-logo.png";
+import { ProductCustomizationDialog } from "@/components/ProductCustomizationDialog";
+import { useProductOptions } from "@/hooks/useProductOptions";
+import { SelectedOption } from "@/types/product-options";
+import logo from "@/assets/coloridoacai.jpg";
 import bckMenuImage from "@/assets/bck-menu.webp";
 import headerImage from "@/assets/header.webp";
 
@@ -72,6 +75,8 @@ const Menu = () => {
     const saved = localStorage.getItem('menu_view_mode');
     return (saved === 'list' ? 'list' : 'grid') as 'grid' | 'list';
   });
+  const [customizationProduct, setCustomizationProduct] = useState<MenuItem | null>(null);
+  const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
 
   useEffect(() => {
     console.log('🍽️ Menu component mounted');
@@ -152,10 +157,40 @@ const Menu = () => {
     });
   }, [addItem, storeIsOpen]);
 
-  // Handle image errors
-  const handleImageError = useCallback((itemId: string) => {
-    setImageErrors(prev => new Set([...prev, itemId]));
+  // Handle product with options
+  const handleProductClick = useCallback((item: MenuItem) => {
+    setCustomizationProduct(item);
+    setIsCustomizationOpen(true);
   }, []);
+
+  // Handle adding product with options to cart
+  const handleAddWithOptions = useCallback((selectedOptions: SelectedOption[]) => {
+    if (!customizationProduct) return;
+
+    if (!storeIsOpen) {
+      toast.error('🔒 Desculpe, a loja está fechada no momento. Não é possível adicionar itens ao carrinho.', {
+        duration: 4000,
+      });
+      return;
+    }
+
+    addItem({
+      ...customizationProduct,
+      selectedOptions,
+    });
+
+    toast.success(`${customizationProduct.name} adicionado ao carrinho! 🛒`, {
+      duration: 2000,
+      style: {
+        background: 'linear-gradient(135deg, #10b981, #059669)',
+        color: 'white',
+        border: 'none',
+      }
+    });
+
+    setIsCustomizationOpen(false);
+    setCustomizationProduct(null);
+  }, [customizationProduct, addItem, storeIsOpen]);
 
   // Handle product reordering
   const handleReorder = useCallback(async (categoryId: string, startIndex: number, endIndex: number) => {
@@ -273,7 +308,7 @@ const Menu = () => {
             <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
             <div className="text-center">
               <p className="text-purple-900 font-bold text-lg">Carregando cardápio...</p>
-              <p className="text-purple-600 text-sm mt-1">Preparando delícias para você! 🥥</p>
+              <p className="text-purple-600 text-sm mt-1">Preparando delícias para você! 🫐</p>
             </div>
           </div>
         </div>
@@ -372,7 +407,7 @@ const Menu = () => {
               <div className="flex items-center gap-4">
                 <img 
                   src={logo} 
-                  alt="Coco Loko" 
+                  alt="Colorido Açaí" 
                   className="h-16 w-auto drop-shadow-lg"
                 />
                 <h1 className="text-3xl font-bold text-white drop-shadow-md">
@@ -457,7 +492,7 @@ const Menu = () => {
       }`}>
         {categorizedItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">
-            <div className="text-4xl mb-3">🥥</div>
+            <div className="text-4xl mb-3">🫐</div>
             <p className="text-gray-900 font-semibold text-lg">Nenhum item disponível</p>
           </div>
         ) : (
@@ -855,6 +890,16 @@ const Menu = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Product Customization Dialog */}
+      {customizationProduct && (
+        <ProductCustomizationDialog
+          open={isCustomizationOpen}
+          onOpenChange={setIsCustomizationOpen}
+          product={customizationProduct}
+          onAddToCart={handleAddWithOptions}
+        />
+      )}
     </div>
   );
 };

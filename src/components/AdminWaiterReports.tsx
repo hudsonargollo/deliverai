@@ -175,7 +175,7 @@ const AdminWaiterReports = () => {
       
       if (error) {
         console.error("Edge Function error:", error);
-        toast.error("Erro ao carregar lista de garçons");
+        toast.error("Erro ao carregar lista da equipe");
         return;
       }
       
@@ -183,7 +183,7 @@ const AdminWaiterReports = () => {
       
     } catch (error) {
       console.error("Error fetching waiters:", error);
-      toast.error("Erro ao carregar lista de garçons");
+      toast.error("Erro ao carregar lista da equipe");
     }
   };
 

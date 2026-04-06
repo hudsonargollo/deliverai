@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserCheck, ArrowLeft } from "lucide-react";
-import logo from "@/assets/coco-loko-logo.png";
+import logo from "@/assets/coloridoacai.jpg";
 
 const Waiter = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Waiter = () => {
         <div className="text-center mb-8">
           <img 
             src={logo} 
-            alt="Coco Loko Açaiteria" 
+            alt="Colorido Açaí" 
             className="h-24 mx-auto mb-4"
           />
           <div className="flex items-center justify-center gap-2 mb-2">

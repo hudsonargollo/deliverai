@@ -54,7 +54,7 @@ export default function WaiterSetup() {
           setError("Sessão expirada. Por favor, faça login novamente.");
           setTimeout(() => navigate('/login'), 2000);
         } else if (rpcError.message.includes('Only waiters')) {
-          setError("Apenas garçons podem configurar nomes de exibição.");
+          setError("Apenas membros da equipe podem configurar nomes de exibição.");
         } else {
           setError("Erro ao salvar. Tente novamente.");
         }

@@ -1,222 +1,245 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { QrCode, Search, Lock } from "lucide-react";
+import { ShoppingBag, Search, Lock, ArrowRight } from "lucide-react";
 import logo from "@/assets/coloridoacai.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
 
-  // Initialize carousel with autoplay
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: 'center' },
-    [Autoplay({ delay: 5000, stopOnInteraction: true })]
-  );
-
-  // Carousel state
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-
-  // Update selected index when carousel scrolls
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    };
-
-    emblaApi.on('select', onSelect);
-    onSelect();
-
-    return () => {
-      emblaApi.off('select', onSelect);
-    };
-  }, [emblaApi]);
-
-  // Initialize scroll snaps
-  useEffect(() => {
-    if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, [emblaApi]);
-
-  // Scroll to specific slide
-  const scrollTo = useCallback(
-    (index: number) => emblaApi?.scrollTo(index),
-    [emblaApi]
-  );
-
-  // Auto-play pause and resume logic
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const autoplay = emblaApi.plugins()?.autoplay;
-    if (!autoplay) return;
-
-    let resumeTimer: NodeJS.Timeout;
-
-    const handleInteraction = () => {
-      // Pause auto-play on user interaction
-      autoplay.stop();
-
-      // Clear any existing resume timer
-      clearTimeout(resumeTimer);
-
-      // Resume auto-play after 10 seconds of inactivity
-      resumeTimer = setTimeout(() => {
-        autoplay.play();
-      }, 10000);
-    };
-
-    // Listen for user interactions
-    emblaApi.on('pointerDown', handleInteraction);
-
-    return () => {
-      clearTimeout(resumeTimer);
-      emblaApi.off('pointerDown', handleInteraction);
-    };
-  }, [emblaApi]);
-
-  // Keyboard navigation handler
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (!emblaApi) return;
-
-    if (event.key === 'ArrowLeft') {
-      emblaApi.scrollPrev();
-    } else if (event.key === 'ArrowRight') {
-      emblaApi.scrollNext();
-    }
-  }, [emblaApi]);
-
-  // Initial animation hint - trigger first slide after 2 seconds
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const timer = setTimeout(() => {
-      emblaApi.scrollNext();
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [emblaApi]);
-
   return (
-    <div className="min-h-screen bg-gradient-ocean md:bg-gradient-acai">
+    <div className="min-h-screen bg-background">
+      {/* Decorative Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="blob blob-primary w-96 h-96 -top-48 -left-48 rounded-full" />
+        <div className="blob blob-secondary w-72 h-72 -bottom-36 -right-36 rounded-full" />
+        <div className="blob blob-tertiary w-80 h-80 top-1/2 left-1/3 rounded-full" />
+      </div>
+
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 py-8 sm:py-16 text-center text-white">
-          <img 
-            src={logo} 
-            alt="Coco Loko Açaiteria" 
-            className="h-24 sm:h-32 mx-auto mb-8 sm:mb-12"
-          />
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-3xl mx-auto">
-            <Button
-              size="lg"
-              onClick={() => navigate("/qr")}
-              className="h-auto py-6 sm:py-8 flex flex-col bg-purple-900 text-white hover:bg-purple-800 shadow-lg hover:shadow-xl transition-all rounded-2xl min-h-[120px] sm:min-h-[140px]"
+      <div className="relative z-10">
+        <div className="max-w-6xl mx-auto px-4 py-12 sm:py-24 text-center">
+          {/* Logo */}
+          <div className="mb-12 sm:mb-16 animate-pop-in">
+            <img 
+              src={logo} 
+              alt="Colorido Açaí" 
+              className="h-24 sm:h-32 mx-auto drop-shadow-lg"
+            />
+          </div>
+
+          {/* Heading */}
+          <h1 className="font-heading text-4xl sm:text-5xl font-bold text-foreground mb-4 animate-pop-in" style={{ animationDelay: '0.1s' }}>
+            Açaí Colorido, Sabor Vibrante! 🫐
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-12 sm:mb-16 animate-pop-in" style={{ animationDelay: '0.2s' }}>
+            Peça seu açaí e pague com PIX de forma rápida e fácil
+          </p>
+
+          {/* Action Buttons */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto mb-16 sm:mb-24">
+            {/* Fazer Pedido Button */}
+            <button
+              onClick={() => navigate("/menu")}
+              className="btn-primary group flex items-center justify-center gap-3 animate-pop-in"
+              style={{ animationDelay: '0.3s' }}
             >
-              <QrCode className="h-8 w-8 sm:h-10 sm:w-10 mb-2 sm:mb-3" />
-              <span className="font-bold text-sm sm:text-base text-center">Fazer Pedido</span>
-            </Button>
-            <Button
-              size="lg"
-              onClick={() => navigate("/order-lookup")}
-              className="h-auto py-6 sm:py-8 flex flex-col bg-cyan-500 text-white hover:bg-cyan-600 shadow-lg hover:shadow-xl transition-all rounded-2xl min-h-[120px] sm:min-h-[140px]"
+              <ShoppingBag className="w-6 h-6" />
+              <span>Fazer Pedido</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            {/* Consultar Pedido Button */}
+            <button
+              onClick={() => navigate("/pedidos")}
+              className="btn-secondary flex items-center justify-center gap-3 animate-pop-in"
+              style={{ animationDelay: '0.4s' }}
             >
-              <Search className="h-8 w-8 sm:h-10 sm:w-10 mb-2 sm:mb-3" />
-              <span className="font-bold text-sm sm:text-base text-center">Consultar Pedido</span>
-            </Button>
-            <Button
-              size="lg"
+              <Search className="w-6 h-6" />
+              <span>Consultar Pedido</span>
+            </button>
+
+            {/* Área Restrita Button */}
+            <button
               onClick={() => navigate("/auth")}
-              className="h-auto py-6 sm:py-8 flex flex-col bg-yellow-500 text-purple-900 hover:bg-yellow-400 shadow-lg hover:shadow-xl transition-all rounded-2xl min-h-[120px] sm:min-h-[140px] col-span-2"
+              className="btn-primary sm:col-span-2 flex items-center justify-center gap-3 bg-tertiary text-tertiary-foreground border-foreground animate-pop-in"
+              style={{ animationDelay: '0.5s' }}
             >
-              <Lock className="h-8 w-8 sm:h-10 sm:w-10 mb-2 sm:mb-3" />
-              <span className="font-bold text-sm sm:text-base text-center">Área Restrita</span>
-            </Button>
+              <Lock className="w-6 h-6" />
+              <span>Área Restrita</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="bg-[#4a1a4a] py-8 sm:py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-white">Como Funciona</h2>
+      {/* Info Cards Section */}
+      <div className="relative z-10 bg-card py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Location Card */}
+            <Card className="card-sticker p-6 text-center">
+              <div className="icon-circle bg-primary text-primary-foreground mx-auto mb-4">
+                <Search className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2 text-foreground">Localização</h3>
+              <p className="text-sm text-muted-foreground mb-2">
+                Av. Dois de Julho, 44<br />
+                Centro, Ilhéus - BA
+              </p>
+              <a 
+                href="https://maps.google.com/?q=Av.+Dois+de+Julho+44+Ilhéus+BA" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:underline"
+              >
+                Abrir no Google Maps 📍
+              </a>
+            </Card>
+
+            {/* Hours Card */}
+            <Card className="card-sticker p-6 text-center">
+              <div className="icon-circle bg-tertiary text-tertiary-foreground mx-auto mb-4">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2 text-foreground">Horário</h3>
+              <p className="text-sm text-muted-foreground mb-1">
+                Segunda - Domingo
+              </p>
+              <p className="text-sm font-semibold text-foreground">
+                9:30 - 18:30
+              </p>
+              <p className="text-xs text-success mt-2">
+                Aberto agora! 🫐
+              </p>
+            </Card>
+
+            {/* Contact Card */}
+            <Card className="card-sticker p-6 text-center">
+              <div className="icon-circle bg-secondary text-secondary-foreground mx-auto mb-4">
+                <ShoppingBag className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-bold text-lg mb-2 text-foreground">Contato</h3>
+              <p className="text-sm text-muted-foreground mb-2">
+                (73) 98127-4415
+              </p>
+              <a 
+                href="https://wa.me/5573981274415" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 text-xs bg-success text-success-foreground px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
+              >
+                WhatsApp
+              </a>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Why Choose Us Section */}
+      <div className="relative z-10 bg-gradient-to-br from-secondary via-primary to-tertiary py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-center mb-4 text-white">
+            Por que escolher o Colorido Açaí? 🫐
+          </h2>
           
-          {/* Carousel Container */}
-          <div 
-            className="overflow-hidden focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 rounded-lg" 
-            ref={emblaRef}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
-            role="region"
-            aria-label="Como Funciona carousel"
-          >
-            <div className="flex touch-pan-y -mx-2 sm:-mx-3">
-              {/* Slide 1 - Fazer Pedido */}
-              <div className="flex-[0_0_90%] sm:flex-[0_0_85%] min-w-0 px-2 sm:px-3">
-                <Card className="p-6 sm:p-8 text-center shadow-lg hover:shadow-xl transition-all border-2 border-purple-100 rounded-2xl">
-                  <div className="bg-purple-900 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <QrCode className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg sm:text-xl mb-3 text-purple-900">Fazer Pedido</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Escaneia QR Code, informa nome e WhatsApp, faz o pedido, paga com PIX e recebe notificações
-                  </p>
-                </Card>
+          <div className="space-y-8 mt-12">
+            {/* Feature 1 */}
+            <div className="text-center">
+              <div className="icon-circle bg-white text-primary mx-auto mb-4">
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                </svg>
               </div>
+              <h3 className="font-heading font-bold text-xl text-white mb-2">Feito com Amor</h3>
+              <p className="text-white/90 text-sm max-w-md mx-auto">
+                Cada açaí é preparado com carinho e ingredientes frescos e selecionados
+              </p>
+            </div>
 
-              {/* Slide 2 - Consultar Pedido */}
-              <div className="flex-[0_0_90%] sm:flex-[0_0_85%] min-w-0 px-2 sm:px-3">
-                <Card className="p-6 sm:p-8 text-center shadow-lg hover:shadow-xl transition-all border-2 border-cyan-100 rounded-2xl">
-                  <div className="bg-cyan-500 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Search className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg sm:text-xl mb-3 text-purple-900">Consultar Pedido</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Acompanhe o status do seu pedido em tempo real
-                  </p>
-                </Card>
+            {/* Feature 2 */}
+            <div className="text-center">
+              <div className="icon-circle bg-white text-primary mx-auto mb-4">
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
               </div>
+              <h3 className="font-heading font-bold text-xl text-white mb-2">Sabores Únicos</h3>
+              <p className="text-white/90 text-sm max-w-md mx-auto">
+                Variedade incrível de sabores e coberturas para você criar seu açaí perfeito
+              </p>
+            </div>
 
-              {/* Slide 3 - Área Restrita */}
-              <div className="flex-[0_0_90%] sm:flex-[0_0_85%] min-w-0 px-2 sm:px-3">
-                <Card className="p-6 sm:p-8 text-center shadow-lg hover:shadow-xl transition-all border-2 border-yellow-100 rounded-2xl">
-                  <div className="bg-yellow-500 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Lock className="h-8 w-8 sm:h-10 sm:w-10 text-purple-900" />
-                  </div>
-                  <h3 className="font-bold text-lg sm:text-xl mb-3 text-purple-900">Área Restrita</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Acesso para garçons e gerentes gerenciarem pedidos e operações
-                  </p>
-                </Card>
+            {/* Feature 3 */}
+            <div className="text-center">
+              <div className="icon-circle bg-white text-primary mx-auto mb-4">
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                </svg>
               </div>
+              <h3 className="font-heading font-bold text-xl text-white mb-2">Atendimento Especial</h3>
+              <p className="text-white/90 text-sm max-w-md mx-auto">
+                Nossa equipe está sempre pronta para te atender com um sorriso e fazer seu dia melhor
+              </p>
             </div>
           </div>
-
-          {/* Pagination Dots */}
-          <div className="flex justify-center items-center gap-2 mt-6">
-            {scrollSnaps.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => scrollTo(index)}
-                className={`transition-all rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                  index === selectedIndex
-                    ? 'bg-purple-900 w-8 h-3'
-                    : 'bg-purple-300 w-3 h-3'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-                aria-current={index === selectedIndex ? 'true' : 'false'}
-              />
-            ))}
-          </div>
         </div>
       </div>
 
+      {/* Footer */}
+      <footer className="relative z-10 bg-gradient-to-br from-primary via-secondary to-tertiary text-white py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto px-4">
+          {/* Logo and Brand */}
+          <div className="text-center mb-8">
+            <div className="inline-block bg-white rounded-2xl p-3 mb-4">
+              <img 
+                src={logo} 
+                alt="Colorido Açaí" 
+                className="h-12 w-auto"
+              />
+            </div>
+            <h3 className="font-heading font-bold text-2xl mb-2">Colorido Açaí e Cia</h3>
+            <p className="text-white/90 text-sm max-w-md mx-auto">
+              Sabor e frescor em cada colherada! 🫐
+            </p>
+          </div>
 
+          {/* Quick Links */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button 
+              onClick={() => navigate("/menu")} 
+              className="text-sm text-white/90 hover:text-white transition-colors"
+            >
+              Cardápio
+            </button>
+            <span className="text-white/50">•</span>
+            <button 
+              onClick={() => navigate("/pedidos")} 
+              className="text-sm text-white/90 hover:text-white transition-colors"
+            >
+              Meus Pedidos
+            </button>
+            <span className="text-white/50">•</span>
+            <button 
+              onClick={() => navigate("/auth")} 
+              className="text-sm text-white/90 hover:text-white transition-colors"
+            >
+              Área Restrita
+            </button>
+          </div>
+
+          {/* Contact Info */}
+          <div className="text-center text-sm text-white/80 space-y-1 mb-8">
+            <p>📍 Av. Dois de Julho, 44 - Centro, Ilhéus - BA</p>
+            <p>📞 (73) 98127-4415</p>
+            <p>🕐 Segunda a Domingo: 9:30 - 18:30</p>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center text-xs text-white/60 pt-6 border-t border-white/20">
+            <p>&copy; {new Date().getFullYear()} Colorido Açaí e Cia. Todos os direitos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

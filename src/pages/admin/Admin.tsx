@@ -27,7 +27,7 @@ const Admin = () => {
     { title: "Pedidos", icon: ChefHat, path: "/cashier", description: "Gerenciar pedidos" },
     { title: "Produtos", icon: ShoppingBag, path: "/admin/products", description: "Gerenciar cardápio" },
     { title: "Relatórios", icon: BarChart3, path: "/reports", description: "Análises e métricas" },
-    { title: "Garçons", icon: Users, path: "/waiter-management", description: "Gerenciar equipe" },
+    { title: "Equipe", icon: Users, path: "/waiter-management", description: "Gerenciar equipe" },
     { title: "Clientes", icon: Users, path: "/customers", description: "Gerenciar clientes" },
     { title: "WhatsApp", icon: MessageCircle, path: "/whatsapp-admin", description: "Configurar WhatsApp" },
     { title: "Impressão", icon: Printer, path: "/print-server-config", description: "Configurar impressora" },

@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { useCart } from "@/lib/cartContext";
 import { normalizePhone } from "@/lib/phoneUtils";
 import { notificationTriggers } from "@/integrations/whatsapp";
+import { SelectedOption } from "@/types/product-options";
 
 type CheckoutStep = 'NAME' | 'WHATSAPP' | 'CONFIRM' | 'REVIEW';
 
@@ -226,7 +227,13 @@ const Checkout = () => {
       }
 
       // Calculate total
-      const totalAmount = cartState.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const totalAmount = cartState.items.reduce((sum, item) => {
+        const itemTotal = item.price * item.quantity;
+        const optionsTotal = item.selectedOptions?.reduce((optSum, selection) => {
+          return optSum + (selection.option.price_modifier * selection.quantity);
+        }, 0) || 0;
+        return sum + itemTotal + optionsTotal;
+      }, 0);
       const commissionAmount = isWaiter ? totalAmount * 0.1 : 0;
 
       // Create order - staff orders go to "in_preparation" with payment pending
@@ -282,6 +289,42 @@ const Checkout = () => {
         console.error('Error creating order items:', itemsError);
         toast.error("Erro ao criar itens do pedido. Tente novamente.");
         return;
+      }
+
+      // Create order item options if any
+      const orderItemOptions: any[] = [];
+      for (const item of cartState.items) {
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          // Find the order item we just created
+          const orderItem = await supabase
+            .from('order_items')
+            .select('id')
+            .eq('order_id', order.id)
+            .eq('menu_item_id', item.id)
+            .single();
+
+          if (orderItem.data) {
+            item.selectedOptions.forEach((selection: SelectedOption) => {
+              orderItemOptions.push({
+                order_item_id: orderItem.data.id,
+                product_option_id: selection.option.id,
+                quantity: selection.quantity,
+                unit_price: selection.option.price_modifier,
+              });
+            });
+          }
+        }
+      }
+
+      if (orderItemOptions.length > 0) {
+        const { error: optionsError } = await supabase
+          .from('order_item_options')
+          .insert(orderItemOptions);
+
+        if (optionsError) {
+          console.error('Error creating order item options:', optionsError);
+          // Don't fail the order if options fail - they're not critical
+        }
       }
 
       // Save customer info to sessionStorage
@@ -547,15 +590,32 @@ const Checkout = () => {
                   {/* Cart items */}
                   <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                     {cartState.items.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
+                      <div key={item.id} className="flex justify-between items-start py-2 border-b border-gray-200 last:border-0">
                         <div className="flex-1">
                           <p className="font-semibold text-gray-900">{item.name}</p>
                           <p className="text-sm text-gray-600">R$ {item.price.toFixed(2)} cada</p>
+                          
+                          {/* Selected Options */}
+                          {item.selectedOptions && item.selectedOptions.length > 0 && (
+                            <div className="mt-2 space-y-1">
+                              {item.selectedOptions.map((selection, idx) => (
+                                <div key={idx} className="text-xs text-gray-600 bg-white px-2 py-1 rounded">
+                                  <span className="font-medium">{selection.option.name}</span>
+                                  {selection.quantity > 1 && <span> x{selection.quantity}</span>}
+                                  {selection.option.price_modifier !== 0 && (
+                                    <span className="text-green-600 ml-1">
+                                      {selection.option.price_modifier > 0 ? '+' : ''}R$ {(selection.option.price_modifier * selection.quantity).toFixed(2)}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-gray-900">x{item.quantity}</p>
                           <p className="text-sm font-bold text-cyan-600">
-                            R$ {(item.price * item.quantity).toFixed(2)}
+                            R$ {(item.price * item.quantity + (item.selectedOptions?.reduce((sum, s) => sum + (s.option.price_modifier * s.quantity), 0) || 0)).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -566,7 +626,13 @@ const Checkout = () => {
                   <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-5 flex justify-between items-center shadow-lg">
                     <span className="font-bold text-xl text-white">Total</span>
                     <span className="font-bold text-3xl text-white">
-                      R$ {cartState.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
+                      R$ {cartState.items.reduce((sum, item) => {
+                        const itemTotal = item.price * item.quantity;
+                        const optionsTotal = item.selectedOptions?.reduce((optSum, selection) => {
+                          return optSum + (selection.option.price_modifier * selection.quantity);
+                        }, 0) || 0;
+                        return sum + itemTotal + optionsTotal;
+                      }, 0).toFixed(2)}
                     </span>
                   </div>
 

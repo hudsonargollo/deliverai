@@ -381,7 +381,7 @@ export default function WhatsAppAdmin() {
         },
         body: JSON.stringify({
           phoneNumber: testPhoneNumber,
-          message: '🥥 Teste de conexão WhatsApp - Coco Loko Açaiteria ✅\n\nSe você recebeu esta mensagem, o sistema de notificações está funcionando perfeitamente!\n\n📱 Mensagem enviada em: ' + new Date().toLocaleString('pt-BR')
+          message: '🫐 Teste de conexão WhatsApp - Colorido Açaí ✅\n\nSe você recebeu esta mensagem, o sistema de notificações está funcionando perfeitamente!\n\n📱 Mensagem enviada em: ' + new Date().toLocaleString('pt-BR')
         })
       });
 

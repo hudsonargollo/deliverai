@@ -120,6 +120,11 @@ export interface OrderData {
     itemName: string;
     quantity: number;
     unitPrice: number;
+    selectedOptions?: Array<{
+      optionName: string;
+      quantity: number;
+      priceModifier: number;
+    }>;
   }>;
   status: string;
   createdAt: string;

@@ -18,7 +18,7 @@ export const LoadingFallback: React.FC = () => {
           {/* Loading text */}
           <div className="text-center">
             <p className="text-purple-900 font-bold text-lg">Carregando...</p>
-            <p className="text-purple-600 text-sm mt-1">Preparando para você! 🥥</p>
+            <p className="text-purple-600 text-sm mt-1">Preparando para você! 🫐</p>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import logo from "@/assets/coco-loko-logo.png";
+import logo from "@/assets/coloridoacai.jpg";
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Email inválido" }).max(255),
@@ -16,16 +16,16 @@ const authSchema = z.object({
 });
 
 const greetings = [
-  "Bora trabalhar! 💪",
-  "Vamos fazer acontecer! 🚀",
-  "Hora de brilhar! ⭐",
-  "Foco no resultado! 🎯",
-  "Seu esforço vale a pena! 💎",
-  "Cada dia é uma vitória! 🏆",
-  "Vamos com tudo! 🔥",
-  "Determinação é tudo! 💯",
-  "Sucesso vem do trabalho! ⚡",
-  "Você é capaz! 🌟"
+  "Bem-vindo ao Colorido! 🫐",
+  "Que alegria te ver aqui! 💜",
+  "Vamos colorir o dia! 🌈",
+  "Sabor e cor te esperam! ✨",
+  "Pronto para fazer magia? 🎨",
+  "Seu açaí, sua paixão! 💜",
+  "Energia colorida chegando! ⚡",
+  "Vamos espalhar alegria! 🫐",
+  "Sabor vibrante, dia perfeito! 🌟",
+  "Colorido é atitude! 💪"
 ];
 
 const Auth = () => {
@@ -109,10 +109,10 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    // Rotate greetings every 3 seconds
+    // Rotate greetings every 5 seconds (increased from 3)
     const interval = setInterval(() => {
       setGreetingIndex((prev) => (prev + 1) % greetings.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -199,45 +199,45 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Decorative Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="blob blob-primary w-96 h-96 -top-48 -left-48 rounded-full" />
+        <div className="blob blob-secondary w-72 h-72 -bottom-36 -right-36 rounded-full" />
+        <div className="blob blob-tertiary w-80 h-80 top-1/2 right-1/4 rounded-full" />
       </div>
 
-      <Card className="w-full max-w-md shadow-2xl border-0 bg-white relative z-10 rounded-3xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <CardHeader className="text-center space-y-5 pt-8 pb-6 bg-gradient-to-br from-purple-100 via-white to-indigo-100">
-          <div className="flex justify-center animate-in zoom-in duration-500 delay-100">
-            <div className="bg-gradient-to-br from-white to-purple-100 p-4 rounded-2xl shadow-lg ring-2 ring-purple-300/60">
+      <Card className="w-full max-w-md relative z-10 card-sticker animate-pop-in">
+        <CardHeader className="text-center space-y-6 pt-8 pb-6">
+          <div className="flex justify-center animate-pop-in" style={{ animationDelay: '0.1s' }}>
+            <div className="icon-circle bg-primary text-primary-foreground w-20 h-20">
               <img 
                 src={logo} 
-                alt="Coco Loko Açaiteria" 
-                className="h-14 w-auto"
+                alt="Colorido Açaí" 
+                className="w-16 h-16 rounded-full object-cover"
               />
             </div>
           </div>
-          <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-500 delay-200">
-            <CardTitle className="text-2xl font-bold text-gray-900 transition-all duration-500">
-              <span key={greetingIndex} className="inline-block animate-in fade-in slide-in-from-top-1 duration-500">
+          <div className="space-y-2 animate-pop-in" style={{ animationDelay: '0.2s' }}>
+            <CardTitle className="font-heading text-3xl font-bold text-foreground">
+              <span key={greetingIndex} className="inline-block animate-pop-in">
                 {greetings[greetingIndex]}
               </span>
             </CardTitle>
-            <CardDescription className="text-gray-700 text-sm font-medium">
+            <CardDescription className="text-muted-foreground text-base">
               Faça login para continuar
             </CardDescription>
           </div>
         </CardHeader>
         
-        <CardContent className="px-8 py-6 bg-white animate-in fade-in duration-500 delay-300">
-          <form onSubmit={handleAuth} className="space-y-4">
+        <CardContent className="px-8 py-6 animate-pop-in" style={{ animationDelay: '0.3s' }}>
+          <form onSubmit={handleAuth} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-semibold text-gray-800">
+              <Label htmlFor="email" className="text-sm font-bold text-foreground uppercase tracking-wide">
                 Email
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500 text-lg">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl">
                   📧
                 </span>
                 <Input
@@ -248,17 +248,17 @@ const Auth = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   maxLength={255}
-                  className="h-12 text-base pl-11 pr-4 border-2 border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 rounded-lg transition-all bg-gray-50 focus:bg-white"
+                  className="h-14 text-base pl-14 pr-4 border-2 border-foreground focus:border-primary rounded-lg transition-all bg-input focus:shadow-pop"
                 />
               </div>
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-semibold text-gray-800">
+              <Label htmlFor="password" className="text-sm font-bold text-foreground uppercase tracking-wide">
                 Senha
               </Label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500 text-lg">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl">
                   🔒
                 </span>
                 <Input
@@ -270,18 +270,18 @@ const Auth = () => {
                   required
                   minLength={6}
                   maxLength={100}
-                  className="h-12 text-base pl-11 pr-12 border-2 border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 rounded-lg transition-all bg-gray-50 focus:bg-white"
+                  className="h-14 text-base pl-14 pr-14 border-2 border-foreground focus:border-primary rounded-lg transition-all bg-input focus:shadow-pop"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className="h-6 w-6" />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <Eye className="h-6 w-6" />
                   )}
                 </button>
               </div>
@@ -289,7 +289,7 @@ const Auth = () => {
             
             <Button 
               type="submit" 
-              className="w-full h-12 text-base font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200 mt-6 rounded-lg" 
+              className="btn-primary w-full h-14 text-lg mt-6" 
               disabled={loading}
             >
               {loading ? (
@@ -299,8 +299,8 @@ const Auth = () => {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="text-lg">🚀</span>
-                  <span>Entrar no Sistema</span>
+                  <span className="text-xl">🚀</span>
+                  <span>ENTRAR</span>
                 </span>
               )}
             </Button>

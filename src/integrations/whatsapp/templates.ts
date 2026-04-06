@@ -106,7 +106,17 @@ export class WhatsAppTemplates {
     const itemsList = orderData.items
       .map(item => {
         const itemTotal = item.quantity * item.unitPrice;
-        return `• ${item.quantity}x ${item.itemName} - R$ ${itemTotal.toFixed(2)}`;
+        let itemLine = `• ${item.quantity}x ${item.itemName} - R$ ${itemTotal.toFixed(2)}`;
+        
+        // Add selected options if any
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          const optionsText = item.selectedOptions
+            .map(opt => `  ✓ ${opt.optionName}${opt.quantity > 1 ? ` x${opt.quantity}` : ''}`)
+            .join('\n');
+          itemLine += `\n${optionsText}`;
+        }
+        
+        return itemLine;
       })
       .join('\n');
 
@@ -154,7 +164,19 @@ export class WhatsAppTemplates {
     const firstName = orderData.customerName.split(' ')[0];
 
     const itemsList = orderData.items
-      .map(item => `• ${item.quantity}x ${item.itemName}`)
+      .map(item => {
+        let itemLine = `• ${item.quantity}x ${item.itemName}`;
+        
+        // Add selected options if any
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          const optionsText = item.selectedOptions
+            .map(opt => `  ✓ ${opt.optionName}${opt.quantity > 1 ? ` x${opt.quantity}` : ''}`)
+            .join('\n');
+          itemLine += `\n${optionsText}`;
+        }
+        
+        return itemLine;
+      })
       .join('\n');
 
     switch (status) {
@@ -206,7 +228,19 @@ ${additionalMessage}
     const firstName = orderData.customerName.split(' ')[0];
 
     const itemsList = orderData.items
-      .map(item => `• ${item.quantity}x ${item.itemName}`)
+      .map(item => {
+        let itemLine = `• ${item.quantity}x ${item.itemName}`;
+        
+        // Add selected options if any
+        if (item.selectedOptions && item.selectedOptions.length > 0) {
+          const optionsText = item.selectedOptions
+            .map(opt => `  ✓ ${opt.optionName}${opt.quantity > 1 ? ` x${opt.quantity}` : ''}`)
+            .join('\n');
+          itemLine += `\n${optionsText}`;
+        }
+        
+        return itemLine;
+      })
       .join('\n');
 
     return `🫐 *Colorido Açaí* 🫐

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { QrCode, MapPin } from "lucide-react";
 import { validateTableId, formatTableDisplay } from "@/lib/tableContext";
-import logo from "@/assets/coco-loko-logo.png";
+import logo from "@/assets/coloridoacai.jpg";
 import bckMImage from "@/assets/bck-m.webp";
 
 const Welcome = () => {
@@ -31,7 +31,7 @@ const Welcome = () => {
         {/* Logo */}
         <img 
           src={logo} 
-          alt="Coco Loko Açaiteria" 
+          alt="Colorido Açaí" 
           className="h-32 sm:h-40 mx-auto mb-6 drop-shadow-2xl"
         />
         

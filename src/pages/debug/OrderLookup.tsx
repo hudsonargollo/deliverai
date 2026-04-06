@@ -112,50 +112,56 @@ const OrderLookup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700">
-      {/* Enhanced Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow-2xl">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="blob blob-primary w-96 h-96 -top-48 -left-48 rounded-full" />
+        <div className="blob blob-secondary w-72 h-72 -bottom-36 -right-36 rounded-full" />
+        <div className="blob blob-tertiary w-80 h-80 top-1/2 right-1/4 rounded-full" />
+      </div>
+
+      {/* Header */}
+      <div className="relative z-10 bg-card border-b-4 border-foreground">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-white/20 transition-all duration-300 hover:scale-105 backdrop-blur-sm rounded-full p-3"
+              className="text-foreground hover:bg-muted transition-all rounded-full p-3"
               onClick={() => navigate('/')}
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-6 w-6" />
             </Button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                Consultar Pedido
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
+                Meus Pedidos 🫐
               </h1>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base font-medium">
-                Encontre seu pedido pelo telefone cadastrado
+              <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+                Encontre seu pedido pelo telefone
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
-        {/* Enhanced Search by Phone */}
-        <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-white/50" />
-          <div className="relative z-10 p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Phone className="w-6 h-6 text-white" />
+      <div className="relative z-10 max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
+        {/* Search Card */}
+        <Card className="card-sticker animate-pop-in">
+          <div className="p-6 sm:p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="icon-circle bg-primary text-primary-foreground">
+                <Phone className="w-8 h-8" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Consultar por Telefone</h2>
-                <p className="text-sm text-gray-600">Digite seu número para encontrar seus pedidos</p>
+                <h2 className="font-heading text-2xl font-bold text-foreground">Buscar Pedido</h2>
+                <p className="text-sm text-muted-foreground">Digite seu número de telefone</p>
               </div>
             </div>
             
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <Label htmlFor="phoneNumber" className="text-base font-semibold text-gray-700">
-                  Número do Telefone
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber" className="text-sm font-bold text-foreground uppercase tracking-wide">
+                  Telefone
                 </Label>
                 <div className="relative">
                   <Input
@@ -165,24 +171,23 @@ const OrderLookup = () => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && searchByPhone()}
-                    className="text-lg py-4 pl-4 pr-12 border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-lg"
+                    className="h-14 text-lg pl-4 pr-14 border-2 border-foreground focus:border-primary rounded-lg transition-all bg-input focus:shadow-pop"
                   />
-                  <Phone className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Phone className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-muted-foreground" />
                 </div>
-                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  💡 Digite o telefone usado no pedido (com DDD)
+                <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg border-2 border-border">
+                  💡 Use o telefone cadastrado no pedido (com DDD)
                 </p>
               </div>
               <Button 
                 onClick={searchByPhone} 
                 disabled={loading || !phoneNumber.trim()}
-                className="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white py-4 text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 rounded-xl"
-                size="lg"
+                className="btn-primary w-full h-14 text-lg"
               >
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
-                    Buscando Pedidos...
+                    Buscando...
                   </>
                 ) : (
                   <>
@@ -195,56 +200,48 @@ const OrderLookup = () => {
           </div>
         </Card>
 
-        {/* Enhanced Multiple Orders Results */}
+        {/* Order Results */}
         {orderResults.length > 0 && (
-          <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 overflow-hidden">
-            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6">
-              <h3 className="font-bold text-xl mb-2">🎉 Pedidos Encontrados!</h3>
-              <p className="text-green-100">
-                Encontramos {orderResults.length} pedido(s) para este telefone
+          <Card className="card-sticker animate-pop-in">
+            <div className="bg-success text-success-foreground p-6 border-b-2 border-foreground">
+              <h3 className="font-heading font-bold text-2xl mb-2">Pedidos Encontrados! 🎉</h3>
+              <p className="opacity-90">
+                {orderResults.length} pedido(s) encontrado(s)
               </p>
             </div>
             <div className="p-6 space-y-4">
               {orderResults.map((order, index) => (
                 <div
                   key={order.id}
-                  className="group border-2 border-gray-200 rounded-2xl p-5 hover:border-blue-300 hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-r from-white to-gray-50"
+                  className="card-sticker p-5 cursor-pointer transition-all hover:scale-[1.02]"
                   onClick={() => navigate(`/order-status/${order.id}`)}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
-                        {index + 1}
+                      <div className="icon-circle bg-primary text-primary-foreground w-12 h-12">
+                        <span className="font-bold text-lg">{index + 1}</span>
                       </div>
                       <div>
-                        <h4 className="font-bold text-lg text-gray-900 group-hover:text-blue-700 transition-colors">
+                        <h4 className="font-heading font-bold text-lg text-foreground">
                           Pedido #{order.order_number}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           👤 {order.customer_name}
                         </p>
                       </div>
                     </div>
-                    <span className={`px-4 py-2 rounded-2xl text-sm font-bold border-2 shadow-lg ${getStatusColor(order.status)}`}>
+                    <span className={`px-4 py-2 rounded-full text-sm font-bold border-2 ${getStatusColor(order.status)}`}>
                       {getStatusLabel(order.status)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-500 flex items-center gap-2">
-                      📅 {new Date(order.created_at).toLocaleString('pt-BR')}
-                    </p>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
-                        Clique para ver detalhes →
-                      </div>
-                    </div>
-                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    📅 {new Date(order.created_at).toLocaleString('pt-BR')}
+                  </p>
                 </div>
               ))}
               <Button
-                variant="outline"
                 onClick={() => setOrderResults([])}
-                className="w-full mt-6 py-3 text-base font-semibold border-2 border-gray-300 hover:border-blue-500 hover:text-blue-700 transition-all duration-300 rounded-xl"
+                className="btn-secondary w-full h-12"
               >
                 🔍 Nova Busca
               </Button>
@@ -252,53 +249,45 @@ const OrderLookup = () => {
           </Card>
         )}
 
-        {/* Enhanced Help Section */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 shadow-xl overflow-hidden">
+        {/* Help Card */}
+        <Card className="card-sticker bg-tertiary/10 border-tertiary animate-pop-in" style={{ animationDelay: '0.1s' }}>
           <div className="p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-                <AlertCircle className="w-6 h-6 text-white" />
+              <div className="icon-circle bg-tertiary text-tertiary-foreground flex-shrink-0">
+                <AlertCircle className="w-8 h-8" />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-lg text-blue-800 mb-3">💡 Precisa de Ajuda?</h3>
-                <div className="space-y-3">
-                  <div className="bg-white/70 backdrop-blur-sm p-4 rounded-xl border border-blue-200">
-                    <p className="text-sm text-blue-700 font-medium">
-                      📱 Use o telefone com DDD que foi cadastrado no pedido
-                    </p>
-                  </div>
-                  <div className="bg-white/70 backdrop-blur-sm p-4 rounded-xl border border-blue-200">
-                    <p className="text-sm text-blue-700 font-medium">
-                      ✅ Exemplo: (73) 99999-9999
-                    </p>
-                  </div>
-                  <div className="bg-white/70 backdrop-blur-sm p-4 rounded-xl border border-blue-200">
-                    <p className="text-sm text-blue-700 font-medium">
-                      🤝 Se não encontrar seu pedido, entre em contato conosco
-                    </p>
-                  </div>
+                <h3 className="font-heading font-bold text-xl text-foreground mb-3">Precisa de Ajuda? 💡</h3>
+                <div className="space-y-2">
+                  <p className="text-sm text-foreground bg-card p-3 rounded-lg border-2 border-border">
+                    📱 Use o telefone com DDD cadastrado no pedido
+                  </p>
+                  <p className="text-sm text-foreground bg-card p-3 rounded-lg border-2 border-border">
+                    ✅ Exemplo: (73) 99999-9999
+                  </p>
+                  <p className="text-sm text-foreground bg-card p-3 rounded-lg border-2 border-border">
+                    🤝 Não encontrou? Entre em contato conosco
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </Card>
 
-        {/* Enhanced Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Button
-            variant="outline"
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pop-in" style={{ animationDelay: '0.2s' }}>
+          <button
             onClick={() => navigate('/')}
-            className="w-full py-4 text-base font-bold border-2 border-green-300 text-green-700 hover:bg-green-50 hover:border-green-500 hover:text-green-800 transition-all duration-300 transform hover:scale-105 rounded-xl shadow-lg"
+            className="btn-primary h-14 text-base"
           >
             🛒 Fazer Novo Pedido
-          </Button>
-          <Button
-            variant="outline"
+          </button>
+          <button
             onClick={() => navigate('/menu')}
-            className="w-full py-4 text-base font-bold border-2 border-purple-300 text-purple-700 hover:bg-purple-50 hover:border-purple-500 hover:text-purple-800 transition-all duration-300 transform hover:scale-105 rounded-xl shadow-lg"
+            className="btn-secondary h-14 text-base"
           >
             📋 Ver Cardápio
-          </Button>
+          </button>
         </div>
       </div>
     </div>

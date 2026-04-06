@@ -13,7 +13,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/public/Index";
 
 // Lazy load customer pages
-const QRLanding = lazy(() => import("./pages/customer/QRLanding"));
 const Menu = lazy(() => import("./pages/customer/Menu"));
 const Checkout = lazy(() => import("./pages/customer/Checkout"));
 const CheckoutLegacy = lazy(() => import("./pages/customer/CheckoutLegacy"));
@@ -77,11 +76,6 @@ const App = () => {
           <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-          <Route path="/qr" element={
-            <Suspense fallback={<LoadingFallback />}>
-              <QRLanding />
-            </Suspense>
-          } />
           <Route path="/menu" element={
             <Suspense fallback={<LoadingFallback />}>
               <Menu />
@@ -135,6 +129,11 @@ const App = () => {
           <Route path="/order/:orderId" element={
             <Suspense fallback={<LoadingFallback />}>
               <OrderStatus />
+            </Suspense>
+          } />
+          <Route path="/pedidos" element={
+            <Suspense fallback={<LoadingFallback />}>
+              <OrderLookup />
             </Suspense>
           } />
           <Route path="/order-lookup" element={

@@ -7,7 +7,7 @@ describe('LoadingFallback', () => {
     render(<LoadingFallback />);
     
     expect(screen.getByText('Carregando...')).toBeInTheDocument();
-    expect(screen.getByText('Preparando para você! 🥥')).toBeInTheDocument();
+    expect(screen.getByText('Preparando para você! 🫐')).toBeInTheDocument();
   });
 
   it('renders with purple theme styling', () => {

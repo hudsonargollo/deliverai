@@ -32,7 +32,7 @@ ${itemsList}
 
 💰 Total: R$ ${orderData.totalAmount.toFixed(2)}
 
-Fica tranquilo que em uns 15-20 min tá pronto. Te aviso quando puder buscar! 🥥`,
+Fica tranquilo que em uns 15-20 min tá pronto. Te aviso quando puder buscar! �`,
 
     // Variation 2: Warm and conversational
     `Oi, *${firstName}*! 👋
@@ -43,7 +43,7 @@ ${itemsList}
 
 💵 R$ ${orderData.totalAmount.toFixed(2)}
 
-Daqui uns 15-20 minutos tá prontinho. Te mando mensagem quando estiver pronto pra você buscar! 🌴`,
+Daqui uns 15-20 minutos tá prontinho. Te mando mensagem quando estiver pronto pra você buscar! 💜`,
 
     // Variation 3: Friendly and direct
     `Opa, *${firstName}*! ✌️
@@ -54,7 +54,7 @@ ${itemsList}
 
 💰 R$ ${orderData.totalAmount.toFixed(2)}
 
-Uns 15-20 min e tá pronto. Te chamo quando puder pegar! 🥥`,
+Uns 15-20 min e tá pronto. Te chamo quando puder pegar! �`,
 
     // Variation 4: Upbeat and casual
     `Fala, *${firstName}*! 🤙
@@ -65,7 +65,7 @@ ${itemsList}
 
 💵 R$ ${orderData.totalAmount.toFixed(2)}
 
-Em 15-20 min tá na mão. Já te aviso! 🌊`,
+Em 15-20 min tá na mão. Já te aviso! 💜`,
 
     // Variation 5: Simple and friendly
     `Oi, *${firstName}*! 😄
@@ -76,7 +76,7 @@ ${itemsList}
 
 💰 R$ ${orderData.totalAmount.toFixed(2)}
 
-15-20 minutos e te chamo pra buscar! 🥥🌴`
+15-20 minutos e te chamo pra buscar! �💜`
   ];
 
   return getRandomVariation(variations);
@@ -100,7 +100,7 @@ Pode vir buscar aqui no balcão!
 
 ${itemsList}
 
-Te espero aqui! 🥥`,
+Te espero aqui! �`,
 
     // Variation 2: Warm and inviting
     `Oi, *${firstName}*! 👋
@@ -109,7 +109,7 @@ Seu pedido tá pronto! Vem buscar aqui no balcão.
 
 ${itemsList}
 
-Até já! 🌴`,
+Até já! 💜`,
 
     // Variation 3: Casual and direct
     `E aí, *${firstName}*! 🤙
@@ -118,7 +118,7 @@ Pronto! Pode vir pegar aqui no balcão.
 
 ${itemsList}
 
-Te aguardo! 🥥`,
+Te aguardo! �`,
 
     // Variation 4: Friendly and simple
     `Opa, *${firstName}*! ✌️
@@ -127,7 +127,7 @@ Tá pronto! Cola aqui pra buscar.
 
 ${itemsList}
 
-Valeu! 🌊`,
+Valeu! 💜`,
 
     // Variation 5: Warm and welcoming
     `*${firstName}*, pronto! 😊
@@ -136,7 +136,7 @@ Vem buscar aqui no balcão!
 
 ${itemsList}
 
-Te espero! 🥥🌴`
+Te espero! �💜`
   ];
 
   return getRandomVariation(variations);
@@ -160,7 +160,7 @@ Já tô fazendo seu pedido aqui!
 
 ${itemsList}
 
-Daqui uns 15-20 min tá pronto. Te aviso! 🥥`,
+Daqui uns 15-20 min tá pronto. Te aviso! �`,
 
     // Variation 2: Casual and warm
     `E aí, *${firstName}*! 👋
@@ -169,7 +169,7 @@ Seu pedido já tá sendo feito aqui na cozinha!
 
 ${itemsList}
 
-Aguarda aí que logo tá pronto! 🌴`,
+Aguarda aí que logo tá pronto! 💜`,
 
     // Variation 3: Simple and friendly
     `Opa, *${firstName}*! 🤙
@@ -178,7 +178,7 @@ Tô preparando seu pedido!
 
 ${itemsList}
 
-Uns 15-20 min e te chamo! 🥥`,
+Uns 15-20 min e te chamo! �`,
 
     // Variation 4: Warm and conversational
     `Fala, *${firstName}*! ✌️
@@ -187,7 +187,7 @@ Já comecei a fazer aqui!
 
 ${itemsList}
 
-Rapidinho tá pronto. Te aviso! 🌊`,
+Rapidinho tá pronto. Te aviso! 💜`,
 
     // Variation 5: Friendly and direct
     `*${firstName}*! 😊
@@ -196,7 +196,7 @@ Tô fazendo seu pedido agora!
 
 ${itemsList}
 
-15-20 min e te chamo! 🥥🌴`
+15-20 min e te chamo! �💜`
   ];
 
   return getRandomVariation(variations);
