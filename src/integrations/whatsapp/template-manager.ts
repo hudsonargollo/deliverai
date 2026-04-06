@@ -172,7 +172,7 @@ export class MessageTemplateManager {
    */
   private getDefaultTemplate(type: NotificationType): MessageTemplate {
     const templates: Record<NotificationType, string> = {
-      payment_confirmed: `🌴 *Coco Loko Açaiteria* 🌴
+      payment_confirmed: `🫐 *Colorido Açaí* 🫐
 
 ✅ *Pedido Confirmado!*
 
@@ -189,9 +189,9 @@ export class MessageTemplateManager {
 
 Você receberá uma nova mensagem quando seu pedido estiver pronto para retirada!
 
-Obrigado por escolher a Coco Loko! 🥥🌊`,
+Obrigado por escolher a Colorido Açaí! 🫐💜`,
 
-      preparing: `🌴 *Coco Loko Açaiteria* 🌴
+      preparing: `🫐 *Colorido Açaí* 🫐
 
 👨‍🍳 *Pedido em Preparo!*
 
@@ -202,9 +202,9 @@ Seu pedido está sendo preparado com carinho!
 
 ⏰ *Tempo estimado:* {{estimatedTime}}
 
-Em breve você receberá uma notificação quando estiver pronto! 🥥🌊`,
+Em breve você receberá uma notificação quando estiver pronto! 🫐💜`,
 
-      ready: `🌴 *Coco Loko Açaiteria* 🌴
+      ready: `🫐 *Colorido Açaí* 🫐
 
 🎉 *Seu Pedido está pronto para retirada no balcão!*
 
@@ -213,14 +213,14 @@ Em breve você receberá uma notificação quando estiver pronto! 🥥🌊`,
 
 ✨ Por favor, apresente o número do seu pedido: *#{{orderNumber}}*`,
 
-      custom: `🌴 *Coco Loko Açaiteria* 🌴
+      custom: `🫐 *Colorido Açaí* 🫐
 
 📋 *Pedido #{{orderNumber}}*
 👤 *Cliente:* {{customerName}}
 
 {{customMessage}}
 
-🥥🌊`,
+🫐💜`,
     };
 
     return {

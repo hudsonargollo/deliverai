@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { QrCode, Search, Lock } from "lucide-react";
-import logo from "@/assets/coco-loko-logo.png";
+import logo from "@/assets/colorido-logo.svg";
 
 const Index = () => {
   const navigate = useNavigate();

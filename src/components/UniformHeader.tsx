@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { LogOut, Wifi, WifiOff, ArrowLeft } from "lucide-react";
 import { useConnectionMonitor } from "@/components/ConnectionMonitor";
-import logo from "@/assets/coco-loko-logo.png";
+import logo from "@/assets/colorido-logo.svg";
 
 interface UniformHeaderProps {
   title?: string;

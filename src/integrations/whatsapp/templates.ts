@@ -180,7 +180,7 @@ export class WhatsAppTemplates {
         additionalMessage = 'Obrigado pela preferência!';
     }
 
-    return `🌴 *Coco Loko Açaiteria* 🌴
+    return `🫐 *Colorido Açaí* 🫐
 
 Olá *${firstName}*! 👋
 
@@ -198,7 +198,7 @@ ${itemsList}
 
 ${additionalMessage}
 
-🥥🌊`;
+🫐💜`;
   }
 
   private static generateCustomMessageFallback(orderData: OrderData, customText: string): string {
@@ -209,7 +209,7 @@ ${additionalMessage}
       .map(item => `• ${item.quantity}x ${item.itemName}`)
       .join('\n');
 
-    return `🌴 *Coco Loko Açaiteria* 🌴
+    return `🫐 *Colorido Açaí* 🫐
 
 Olá *${firstName}*! 👋
 
@@ -225,6 +225,6 @@ ${itemsList}
 
 ${customText}
 
-🥥🌊`;
+🫐💜`;
   }
 }
