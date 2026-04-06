@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ConnectionStatusBadge } from "@/components/ConnectionStatusBadge";
 import { useConnectionMonitor } from "@/components/ConnectionMonitor";
-import logo from "@/assets/colorido-logo.svg";
+import logo from "@/assets/coloridoacai.jpg";
 
 export interface HeaderAction {
   label: string;

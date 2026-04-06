@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { QrCode, Search, Lock } from "lucide-react";
-import logo from "@/assets/colorido-logo.svg";
+import logo from "@/assets/coloridoacai.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
