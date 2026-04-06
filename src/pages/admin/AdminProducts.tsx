@@ -28,6 +28,7 @@ import { CategoryManagement } from '@/components/CategoryManagement';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { UniformHeader } from '@/components/UniformHeader';
 import { ProductOptionsManager } from '@/components/ProductOptionsManager';
+import { AdminLayout } from '@/layouts/AdminLayout';
 
 interface MenuItem {
   id: string;
@@ -322,14 +323,17 @@ const AdminProducts = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Carregando...</p>
-      </div>
+      <AdminLayout>
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Carregando...</p>
+        </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+    <AdminLayout>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Uniform Header */}
       <UniformHeader
         title="Produtos"
@@ -672,7 +676,8 @@ const AdminProducts = () => {
           onSave={handleSortingSave}
         />
       )}
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 
