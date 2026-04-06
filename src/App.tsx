@@ -9,6 +9,9 @@ import { queueManager } from "@/integrations/whatsapp/queue-manager";
 import LoadingFallback from "@/components/LoadingFallback";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Import Index page directly (not lazy loaded)
+import Index from "./pages/public/Index";
+
 // Lazy load customer pages
 const QRLanding = lazy(() => import("./pages/customer/QRLanding"));
 const Menu = lazy(() => import("./pages/customer/Menu"));
@@ -37,7 +40,6 @@ const WaiterManagement = lazy(() => import("./pages/waiter/WaiterManagement"));
 const WaiterDiagnostic = lazy(() => import("./pages/waiter/WaiterDiagnostic"));
 
 // Lazy load public pages
-const Index = lazy(() => import("./pages/public/Index"));
 const Auth = lazy(() => import("./pages/public/Auth"));
 const NotFound = lazy(() => import("./pages/public/NotFound"));
 
@@ -74,11 +76,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
           <Routes>
-            <Route path="/" element={
-              <Suspense fallback={<LoadingFallback />}>
-                <Index />
-              </Suspense>
-            } />
+            <Route path="/" element={<Index />} />
           <Route path="/qr" element={
             <Suspense fallback={<LoadingFallback />}>
               <QRLanding />

@@ -1,7 +1,11 @@
-name = "coco-loko-acaiteria"
+name = "coloridoacai"
 compatibility_date = "2024-11-06"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
+
+# Custom domain configuration
+[[pages.custom_domains]]
+domain = "coloridoacai.clubemkt.digital"
 
 # Environment variables (available at build time and runtime)
 [vars]
