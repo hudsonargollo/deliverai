@@ -163,9 +163,6 @@ export const AdminSidebar = () => {
           onClick={() => setIsMobileOpen(false)}
         />
       )}
-
-      {/* Main Content Offset */}
-      <div className={`transition-all duration-300 md:ml-${isOpen ? '64' : '20'}`} />
     </>
   );
 };

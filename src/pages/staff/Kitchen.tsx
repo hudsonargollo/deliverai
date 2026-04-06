@@ -279,7 +279,7 @@ const Kitchen = () => {
   const readyOrders = orders.filter((o) => o.status === "ready");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       <RealtimeNotifications 
         enabled={true}
         soundEnabled={true}

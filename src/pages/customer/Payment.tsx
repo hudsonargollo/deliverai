@@ -343,10 +343,10 @@ const Payment = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center" role="status" aria-live="polite">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center" role="status" aria-live="polite">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" aria-hidden="true"></div>
-          <p className="text-muted-foreground text-base">Gerando pagamento...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4" aria-hidden="true"></div>
+          <p className="text-purple-600 text-base font-medium">Gerando pagamento...</p>
         </div>
       </div>
     );
@@ -354,10 +354,10 @@ const Payment = () => {
 
   if (!order || !paymentData) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4" role="alert" aria-live="assertive">
-        <Card className="p-6 text-center max-w-md">
-          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" aria-hidden="true" />
-          <p className="text-muted-foreground mb-4 text-base">Erro ao carregar pagamento</p>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4" role="alert" aria-live="assertive">
+        <Card className="p-6 text-center max-w-md bg-white rounded-3xl border-2 border-purple-200 shadow-xl">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
+          <p className="text-gray-600 mb-4 text-base">Erro ao carregar pagamento</p>
           <Button 
             onClick={() => navigate('/')} 
             className="min-h-[44px]"
@@ -371,7 +371,7 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-700 text-white shadow-2xl sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4 sm:py-6">
