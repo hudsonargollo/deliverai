@@ -58,12 +58,12 @@ echo ""
 # Step 6: Deploy to Cloudflare Pages via Wrangler
 echo -e "${BLUE}☁️  Step 6: Deploying to Cloudflare Pages...${NC}"
 if command -v wrangler &> /dev/null; then
-    wrangler pages deploy dist --project-name=coco-loko-acaiteria --branch=main
+    wrangler pages deploy dist --project-name=coloridoacai --branch=main
     echo -e "${GREEN}✅ Deployed to Cloudflare Pages${NC}"
 else
     echo -e "${YELLOW}⚠️  Wrangler not found. Installing...${NC}"
     npm install -g wrangler
-    wrangler pages deploy dist --project-name=coco-loko-acaiteria --branch=main
+    wrangler pages deploy dist --project-name=coloridoacai --branch=main
     echo -e "${GREEN}✅ Deployed to Cloudflare Pages${NC}"
 fi
 echo ""
@@ -102,11 +102,11 @@ echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━
 echo ""
 echo -e "${BLUE}📍 Deployment URLs:${NC}"
 echo -e "   GitHub: https://github.com/hudsonargollo/praia-pix-order"
-echo -e "   Cloudflare: https://coco-loko-acaiteria.pages.dev"
+echo -e "   Cloudflare: https://coloridoacai.clubemkt.digital"
 echo ""
 echo -e "${BLUE}📊 Next Steps:${NC}"
 echo -e "   1. Check GitHub Actions: https://github.com/hudsonargollo/praia-pix-order/actions"
 echo -e "   2. Verify Cloudflare deployment: https://dash.cloudflare.com/"
-echo -e "   3. Test the application: https://coco-loko-acaiteria.pages.dev"
+echo -e "   3. Test the application: https://coloridoacai.clubemkt.digital"
 echo ""
 echo -e "${GREEN}✨ All done!${NC}"
