@@ -155,8 +155,17 @@ const OrderFlow = () => {
                   R$ {(item.price * item.quantity).toFixed(2)}
                 </p>
                 {item.selectedOptions && item.selectedOptions.length > 0 && (
-                  <div className="text-xs text-slate-500 mt-1">
-                    {item.selectedOptions.map(opt => opt.value).join(", ")}
+                  <div className="text-xs text-slate-500 mt-1 space-y-0.5">
+                    {item.selectedOptions.map((opt, idx) => (
+                      <div key={idx}>
+                        {opt.option.name} {opt.quantity > 1 ? `(x${opt.quantity})` : ''}
+                        {opt.option.price_modifier !== 0 && (
+                          <span className="text-green-600 ml-1">
+                            +R$ {(opt.option.price_modifier * opt.quantity).toFixed(2)}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -195,7 +204,15 @@ const OrderFlow = () => {
         <div className="flex justify-between items-center">
           <span className="font-semibold text-slate-800">Total:</span>
           <span className="text-2xl font-bold text-purple-600">
-            R$ {cartState.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+            R$ {cartState.items.reduce((sum, item) => {
+              let itemTotal = item.price * item.quantity;
+              if (item.selectedOptions && item.selectedOptions.length > 0) {
+                itemTotal += item.selectedOptions.reduce((optSum, opt) => {
+                  return optSum + (opt.option.price_modifier * opt.quantity);
+                }, 0);
+              }
+              return sum + itemTotal;
+            }, 0).toFixed(2)}
           </span>
         </div>
       </Card>
@@ -498,7 +515,15 @@ const OrderFlow = () => {
           <div className="flex justify-between">
             <span className="text-slate-600">Subtotal:</span>
             <span className="font-semibold">
-              R$ {cartState.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+              R$ {cartState.items.reduce((sum, item) => {
+                let itemTotal = item.price * item.quantity;
+                if (item.selectedOptions && item.selectedOptions.length > 0) {
+                  itemTotal += item.selectedOptions.reduce((optSum, opt) => {
+                    return optSum + (opt.option.price_modifier * opt.quantity);
+                  }, 0);
+                }
+                return sum + itemTotal;
+              }, 0).toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between">
@@ -508,7 +533,15 @@ const OrderFlow = () => {
           <div className="border-t pt-2 flex justify-between font-bold">
             <span>Total:</span>
             <span className="text-purple-600">
-              R$ {cartState.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+              R$ {cartState.items.reduce((sum, item) => {
+                let itemTotal = item.price * item.quantity;
+                if (item.selectedOptions && item.selectedOptions.length > 0) {
+                  itemTotal += item.selectedOptions.reduce((optSum, opt) => {
+                    return optSum + (opt.option.price_modifier * opt.quantity);
+                  }, 0);
+                }
+                return sum + itemTotal;
+              }, 0).toFixed(2)}
             </span>
           </div>
         </div>
@@ -608,7 +641,15 @@ const OrderFlow = () => {
           <div>
             <p className="text-slate-600">Total:</p>
             <p className="font-semibold text-purple-600">
-              R$ {cartState.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+              R$ {cartState.items.reduce((sum, item) => {
+                let itemTotal = item.price * item.quantity;
+                if (item.selectedOptions && item.selectedOptions.length > 0) {
+                  itemTotal += item.selectedOptions.reduce((optSum, opt) => {
+                    return optSum + (opt.option.price_modifier * opt.quantity);
+                  }, 0);
+                }
+                return sum + itemTotal;
+              }, 0).toFixed(2)}
             </p>
           </div>
         </div>

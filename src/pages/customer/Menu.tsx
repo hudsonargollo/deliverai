@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ShoppingCart, Plus, Minus, Clock, LogOut, Coffee, Droplets, IceCream, Sandwich, Pizza, Cake, LayoutGrid, List, Store, ChevronDown } from "lucide-react";
+import { ShoppingCart, Plus, Minus, LogOut, Coffee, Droplets, IceCream, Sandwich, Pizza, Cake, LayoutGrid, List, Store, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cartContext";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
@@ -20,10 +20,8 @@ import { SortingToggle } from "@/components/SortingToggle";
 import { SortableProductList } from "@/components/SortableProductList";
 import { DraggableProductCard } from "@/components/DraggableProductCard";
 import { ProductCustomizationDialog } from "@/components/ProductCustomizationDialog";
-import { useProductOptions } from "@/hooks/useProductOptions";
 import { SelectedOption } from "@/types/product-options";
 import logo from "@/assets/coloridoacai.jpg";
-import bckMenuImage from "@/assets/bck-menu.webp";
 import headerImage from "@/assets/header.webp";
 
 interface MenuItem {
@@ -122,18 +120,6 @@ const Menu = () => {
         behavior: 'smooth'
       });
     }
-  }, []);
-
-  // Get category icon
-  const getCategoryIcon = useCallback((categoryName: string) => {
-    const name = categoryName.toLowerCase();
-    if (name.includes('açaí') || name.includes('acai')) return IceCream;
-    if (name.includes('bebida') || name.includes('drink')) return Droplets;
-    if (name.includes('café') || name.includes('coffee')) return Coffee;
-    if (name.includes('lanche') || name.includes('sanduíche')) return Sandwich;
-    if (name.includes('pizza')) return Pizza;
-    if (name.includes('sobremesa') || name.includes('doce')) return Cake;
-    return ShoppingCart;
   }, []);
 
   // Handle image errors

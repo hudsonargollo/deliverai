@@ -157,7 +157,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getTotalPrice = (): number => {
-    return state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return state.items.reduce((sum, item) => {
+      let itemTotal = item.price * item.quantity;
+      if (item.selectedOptions && item.selectedOptions.length > 0) {
+        itemTotal += item.selectedOptions.reduce((optSum, opt) => {
+          return optSum + (opt.option.price_modifier * opt.quantity);
+        }, 0);
+      }
+      return sum + itemTotal;
+    }, 0);
   };
 
   const value: CartContextType = {

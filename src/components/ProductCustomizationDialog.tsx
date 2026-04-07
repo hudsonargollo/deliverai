@@ -9,9 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
 import { Plus, Minus, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
 import { useProductOptions } from '@/hooks/useProductOptions';
-import { ProductOptionGroupWithOptions, SelectedOption } from '@/types/product-options';
+import { SelectedOption } from '@/types/product-options';
 
 interface MenuItem {
   id: string;
