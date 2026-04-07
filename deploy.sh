@@ -45,7 +45,7 @@ echo ""
 
 # Step 4: Push to GitHub
 echo -e "${BLUE}📤 Step 4: Pushing to GitHub...${NC}"
-git push origin main
+git push origin master
 echo -e "${GREEN}✅ Pushed to GitHub${NC}"
 echo ""
 
@@ -58,12 +58,12 @@ echo ""
 # Step 6: Deploy to Cloudflare Pages via Wrangler
 echo -e "${BLUE}☁️  Step 6: Deploying to Cloudflare Pages...${NC}"
 if command -v wrangler &> /dev/null; then
-    wrangler pages deploy dist --project-name=coloridoacai --branch=main
+    wrangler pages deploy dist --project-name=coloridoacai --branch=master
     echo -e "${GREEN}✅ Deployed to Cloudflare Pages${NC}"
 else
     echo -e "${YELLOW}⚠️  Wrangler not found. Installing...${NC}"
     npm install -g wrangler
-    wrangler pages deploy dist --project-name=coloridoacai --branch=main
+    wrangler pages deploy dist --project-name=coloridoacai --branch=master
     echo -e "${GREEN}✅ Deployed to Cloudflare Pages${NC}"
 fi
 echo ""
