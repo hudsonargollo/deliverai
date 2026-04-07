@@ -308,7 +308,7 @@ const Menu = () => {
       return;
     }
     
-    navigate("/checkout");
+    navigate("/order-flow");
   }, [cartState.items.length, navigate, storeIsOpen]);
 
   if (loading) {

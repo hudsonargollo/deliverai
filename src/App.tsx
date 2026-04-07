@@ -17,6 +17,7 @@ import Index from "./pages/public/Index";
 const Menu = lazy(() => import("./pages/customer/Menu"));
 const Checkout = lazy(() => import("./pages/customer/Checkout"));
 const CheckoutLegacy = lazy(() => import("./pages/customer/CheckoutLegacy"));
+const OrderFlow = lazy(() => import("./pages/customer/OrderFlow"));
 const Payment = lazy(() => import("./pages/customer/Payment"));
 const OrderStatus = lazy(() => import("./pages/customer/OrderStatus"));
 
@@ -117,6 +118,11 @@ const App = () => {
           <Route path="/checkout2" element={
             <Suspense fallback={<LoadingFallback />}>
               <CheckoutLegacy />
+            </Suspense>
+          } />
+          <Route path="/order-flow" element={
+            <Suspense fallback={<LoadingFallback />}>
+              <OrderFlow />
             </Suspense>
           } />
           <Route path="/payment/:orderId" element={
