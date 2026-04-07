@@ -202,11 +202,11 @@ export const Settings = () => {
           {COLOR_PALETTES.map((palette) => (
             <div
               key={palette.name}
-              className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-colors cursor-pointer"
+              className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-colors cursor-pointer bg-white"
               onClick={() => applyPalette(palette)}
             >
               <h3 className="font-bold text-gray-900 mb-1">{palette.name}</h3>
-              <p className="text-xs text-gray-600 mb-3">{palette.description}</p>
+              <p className="text-xs text-gray-700 mb-3 font-medium">{palette.description}</p>
               
               <div className="flex gap-2 mb-3">
                 <div
@@ -245,7 +245,7 @@ export const Settings = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Primary Color */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Cor Primária</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Cor Primária</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -256,20 +256,20 @@ export const Settings = () => {
                 value={customColors.primary}
                 onChange={(e) => handleColorChange('primary', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.primary, 'primary')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'primary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'primary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Secondary Color */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Cor Secundária</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Cor Secundária</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -280,20 +280,20 @@ export const Settings = () => {
                 value={customColors.secondary}
                 onChange={(e) => handleColorChange('secondary', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.secondary, 'secondary')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'secondary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'secondary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Accent Color */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Cor de Destaque</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Cor de Destaque</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -304,20 +304,20 @@ export const Settings = () => {
                 value={customColors.accent}
                 onChange={(e) => handleColorChange('accent', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.accent, 'accent')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'accent' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'accent' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Menu Background */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Fundo do Menu</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Fundo do Menu</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -328,20 +328,20 @@ export const Settings = () => {
                 value={customColors.menuBg}
                 onChange={(e) => handleColorChange('menuBg', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.menuBg, 'menuBg')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'menuBg' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'menuBg' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Menu Text */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Texto do Menu</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Texto do Menu</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -352,20 +352,20 @@ export const Settings = () => {
                 value={customColors.menuText}
                 onChange={(e) => handleColorChange('menuText', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.menuText, 'menuText')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'menuText' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'menuText' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Header Gradient Start */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Cabeçalho (Início)</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Cabeçalho (Início)</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -376,20 +376,20 @@ export const Settings = () => {
                 value={customColors.headerStart}
                 onChange={(e) => handleColorChange('headerStart', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.headerStart, 'headerStart')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'headerStart' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'headerStart' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
 
           {/* Header Gradient End */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Cabeçalho (Fim)</label>
+            <label className="block text-sm font-bold text-gray-900 mb-2">Cabeçalho (Fim)</label>
             <div className="flex gap-2">
               <div
                 className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
@@ -400,13 +400,13 @@ export const Settings = () => {
                 value={customColors.headerEnd}
                 onChange={(e) => handleColorChange('headerEnd', e.target.value)}
                 placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={() => copyToClipboard(customColors.headerEnd, 'headerEnd')}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
               >
-                {copiedColor === 'headerEnd' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                {copiedColor === 'headerEnd' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
               </button>
             </div>
           </div>
