@@ -18,8 +18,10 @@ import { useCart } from "@/lib/cartContext";
 import { normalizePhone } from "@/lib/phoneUtils";
 import { notificationTriggers } from "@/integrations/whatsapp";
 import { SelectedOption } from "@/types/product-options";
+import OrderNotesDialog from "@/components/OrderNotesDialog";
+import SpecialInstructionsCard from "@/components/SpecialInstructionsCard";
 
-type CheckoutStep = 'NAME' | 'WHATSAPP' | 'CONFIRM' | 'REVIEW';
+type CheckoutStep = 'REVIEW' | 'NAME' | 'WHATSAPP' | 'CONFIRM';
 
 // 15 rotating welcome phrases
 const WELCOME_PHRASES = [
@@ -44,7 +46,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { state: cartState, clearCart, addItem, removeItem } = useCart();
   
-  const [step, setStep] = useState<CheckoutStep>('NAME');
+  const [step, setStep] = useState<CheckoutStep>('REVIEW');
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [errors, setErrors] = useState({ name: "", whatsapp: "" });
@@ -61,6 +63,7 @@ const Checkout = () => {
   const [loadingMenu, setLoadingMenu] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState<any | null>(null);
   const [itemQuantity, setItemQuantity] = useState(1);
+  const [specialInstructions, setSpecialInstructions] = useState("");
 
   // Check if user is staff on mount
   useEffect(() => {
@@ -124,6 +127,10 @@ const Checkout = () => {
   };
 
   // Step handlers
+  const handleReviewContinue = () => {
+    setStep('NAME');
+  };
+
   const handleNameContinue = () => {
     if (validateName(name)) {
       // Capitalize the name before moving to next step
@@ -148,15 +155,8 @@ const Checkout = () => {
     setWhatsapp(digits.slice(0, 11));
   };
 
-  // Auto-advance from CONFIRM to REVIEW
-  useEffect(() => {
-    if (step === 'CONFIRM') {
-      const timer = setTimeout(() => {
-        setStep('REVIEW');
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [step]);
+  // Auto-advance from CONFIRM to NAME (removed - we'll handle this differently)
+  // The CONFIRM step is just a visual confirmation, then we go to REVIEW with payment button
 
   // Load menu items when switching to menu view
   const loadMenuItems = async () => {
@@ -243,7 +243,8 @@ const Checkout = () => {
         table_number: '-',
         status: isStaff ? 'in_preparation' : 'pending',
         payment_status: 'pending',
-        total_amount: totalAmount
+        total_amount: totalAmount,
+        special_instructions: specialInstructions.trim() || null
       };
 
       // Add waiter_id and commission if user is a waiter
@@ -563,9 +564,25 @@ const Checkout = () => {
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
                   Tudo certo! ✨
                 </h2>
-                <p className="text-lg text-gray-700">
+                <p className="text-lg text-gray-700 mb-6">
                   Vamos te avisar pelo WhatsApp quando seu pedido estiver pronto!
                 </p>
+                <Button
+                  onClick={handleGoToPayment}
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Processando...
+                    </span>
+                  ) : (
+                    <>
+                      💳 Ir para Pagamento
+                    </>
+                  )}
+                </Button>
               </Card>
             </motion.div>
           )}
@@ -582,9 +599,9 @@ const Checkout = () => {
               <Card className="p-6 sm:p-8 shadow-xl border-2 border-purple-100">
                 <div className="text-center mb-6">
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Aqui está o seu pedido, {name}!
+                    Revise seu Pedido 🛒
                   </h2>
-                  <p className="text-gray-600">Confira se está tudo certo antes de prosseguir</p>
+                  <p className="text-gray-600">Confira os itens antes de continuar</p>
                 </div>
                 <div className="space-y-4">
                   {/* Cart items */}
@@ -638,21 +655,31 @@ const Checkout = () => {
 
                   {/* Action buttons */}
                   <div className="space-y-3 pt-4">
+                    {/* Special Instructions */}
+                    <div className="flex gap-2">
+                      <OrderNotesDialog
+                        notes={specialInstructions}
+                        onNotesChange={setSpecialInstructions}
+                        maxLength={500}
+                        triggerClassName="flex-1"
+                        showBadge={true}
+                      />
+                    </div>
+
+                    {/* Display special instructions if they exist */}
+                    {specialInstructions.trim() && (
+                      <SpecialInstructionsCard
+                        instructions={specialInstructions}
+                        compact={false}
+                      />
+                    )}
+
                     <Button
-                      onClick={handleGoToPayment}
+                      onClick={handleReviewContinue}
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-7 text-xl shadow-lg hover:shadow-xl transition-all"
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-7 text-xl shadow-lg hover:shadow-xl transition-all"
                     >
-                      {isSubmitting ? (
-                        <span className="flex items-center gap-2">
-                          <span className="animate-spin">⏳</span>
-                          Processando...
-                        </span>
-                      ) : (
-                        <>
-                          💳 Ir para Pagamento
-                        </>
-                      )}
+                      Continuar →
                     </Button>
                     <Button
                       onClick={() => setIsEditDialogOpen(true)}
@@ -661,13 +688,20 @@ const Checkout = () => {
                     >
                       ✏️ Editar Pedido
                     </Button>
+                    <Button
+                      onClick={() => navigate("/menu")}
+                      variant="outline"
+                      className="w-full py-6 text-lg font-semibold border-2 hover:bg-red-50 hover:border-red-300 transition-colors text-red-600"
+                    >
+                      ← Voltar ao Menu
+                    </Button>
                   </div>
                 </div>
               </Card>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
       {/* Edit Order Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
@@ -774,7 +808,7 @@ const Checkout = () => {
                 </div>
               </>
             )}
-            </> 
+              </>
             ) : (
               // Menu View
               <>

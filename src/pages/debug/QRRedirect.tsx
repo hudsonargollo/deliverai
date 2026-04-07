@@ -16,8 +16,8 @@ const QRRedirect = () => {
       setCurrentTableId(tableId);
     }
 
-    // Always redirect to splash screen
-    navigate("/qr", { replace: true });
+    // Always redirect to menu
+    navigate("/menu", { replace: true });
   }, [tableId, navigate]);
 
   // Show loading state while redirecting

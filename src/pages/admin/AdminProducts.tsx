@@ -26,7 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import { SortingDialog } from '@/components/SortingDialog';
 import { CategoryManagement } from '@/components/CategoryManagement';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
-import { UniformHeader } from '@/components/UniformHeader';
 import { ProductOptionsManager } from '@/components/ProductOptionsManager';
 import { AdminLayout } from '@/layouts/AdminLayout';
 
@@ -334,34 +333,8 @@ const AdminProducts = () => {
   return (
     <AdminLayout>
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
-      {/* Uniform Header */}
-      <UniformHeader
-        title="Produtos"
-        actions={
-          <Button
-            onClick={() => {
-              setEditingItem(null);
-              setFormData({
-                name: '',
-                description: '',
-                price: '',
-                category_id: categories[0]?.id || '',
-                available: true,
-                image_url: '',
-              });
-              setIsDialogOpen(true);
-            }}
-            className="bg-white/15 hover:bg-white/25 text-white border-white/30 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-            size="sm"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Novo Produto</span>
-          </Button>
-        }
-      />
-
-      {/* Tabs for Products and Categories */}
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <Tabs defaultValue="products" className="w-full">
           <TabsList className="inline-flex h-11 items-center justify-center rounded-xl bg-white/80 backdrop-blur-sm p-1 text-muted-foreground shadow-lg border border-purple-100 mb-6">
             <TabsTrigger 

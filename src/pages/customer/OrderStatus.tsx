@@ -8,6 +8,7 @@ import { ArrowLeft, Edit, CreditCard, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { OrderEditDialog } from "@/components/OrderEditDialog";
 import { formatPhoneNumber } from "@/lib/phoneUtils";
+import SpecialInstructionsCard from "@/components/SpecialInstructionsCard";
 
 interface OrderItem {
   id: string;
@@ -26,6 +27,7 @@ interface Order {
   total_amount: number;
   status: string;
   payment_status: string;
+  special_instructions?: string | null;
   created_at: string;
 }
 
@@ -247,6 +249,14 @@ const OrderStatus = () => {
             </div>
           </div>
         </Card>
+
+        {/* Special Instructions */}
+        {order.special_instructions && (
+          <SpecialInstructionsCard
+            instructions={order.special_instructions}
+            compact={false}
+          />
+        )}
 
         {/* Sticky Payment Button */}
         {order.payment_status === 'pending' && (

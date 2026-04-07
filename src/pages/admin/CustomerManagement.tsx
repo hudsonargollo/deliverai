@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, Upload, Download, Search, Users, TrendingUp, ShoppingBag, Eye, CreditCard, Calendar } from "lucide-react";
 import { toast } from "sonner";
-import { UniformHeader } from "@/components/UniformHeader";
+import { AdminLayout } from "@/layouts/AdminLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Customer {
@@ -369,15 +369,10 @@ const CustomerManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
-      {/* Uniform Header */}
-      <UniformHeader
-        title="Clientes"
-        onLogout={handleLogout}
-      />
-
-      {/* Content */}
-      <div className="max-w-7xl mx-auto p-4 pt-6 space-y-6">
+    <AdminLayout>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+        {/* Content */}
+        <div className="max-w-7xl mx-auto p-4 pt-6 space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="p-4 bg-gradient-to-br from-white to-purple-50 border-0 shadow-lg">
@@ -762,7 +757,8 @@ const CustomerManagement = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

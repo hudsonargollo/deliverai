@@ -8,12 +8,12 @@ import {
   MessageSquare,
   Settings,
   LogOut,
-  ChevronDown,
   Menu,
   X,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useSidebar } from '@/lib/sidebarContext';
 import logo from '@/assets/coloridoacai.jpg';
 
 interface NavItem {
@@ -26,7 +26,7 @@ interface NavItem {
 export const AdminSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
+  const { isOpen, setIsOpen } = useSidebar();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const navItems: NavItem[] = [
@@ -76,7 +76,7 @@ export const AdminSidebar = () => {
 
   return (
     <>
-      {/* Mobile Toggle */}
+      {/* Mobile Header with Hamburger */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-purple-600 to-indigo-700 p-4 flex items-center justify-between">
         <img src={logo} alt="Colorido" className="h-8 w-auto" />
         <button
@@ -87,10 +87,18 @@ export const AdminSidebar = () => {
         </button>
       </div>
 
+      {/* Desktop Hamburger Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="hidden md:flex fixed left-4 top-4 z-50 p-2 hover:bg-purple-100 rounded-lg transition-colors text-purple-900 bg-white shadow-md"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-indigo-900 text-white transition-all duration-300 z-30 md:z-20 ${
-          isOpen ? 'w-64' : 'w-20'
+          isOpen ? 'w-64' : 'w-0 md:w-20'
         } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
         {/* Logo Section */}
@@ -104,14 +112,6 @@ export const AdminSidebar = () => {
               </div>
             </div>
           )}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="hidden md:block p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <ChevronDown
-              className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-            />
-          </button>
         </div>
 
         {/* Navigation */}
@@ -128,6 +128,7 @@ export const AdminSidebar = () => {
                   ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg'
                   : 'text-purple-100 hover:bg-white/10'
               }`}
+              title={!isOpen ? item.label : ''}
             >
               {item.icon}
               {isOpen && (
@@ -149,6 +150,7 @@ export const AdminSidebar = () => {
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-100 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200"
+            title={!isOpen ? 'Sair' : ''}
           >
             <LogOut className="w-5 h-5" />
             {isOpen && <span className="text-sm font-medium">Sair</span>}

@@ -1,6 +1,8 @@
 // Waiter Panel Components
 export { default as CustomerInfoForm } from './CustomerInfoForm';
 export { default as OrderNotesInput } from './OrderNotesInput';
+export { default as OrderNotesDialog } from './OrderNotesDialog';
+export { default as SpecialInstructionsCard } from './SpecialInstructionsCard';
 export { default as PIXQRGenerator } from './PIXQRGenerator';
 export { default as AdminWaiterReports } from './AdminWaiterReports';
 export type { CustomerInfo } from './CustomerInfoForm';

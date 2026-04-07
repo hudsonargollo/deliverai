@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ShoppingCart, Plus, Minus, Clock, LogOut, Coffee, Droplets, IceCream, Sandwich, Pizza, Cake, LayoutGrid, List, Store } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Clock, LogOut, Coffee, Droplets, IceCream, Sandwich, Pizza, Cake, LayoutGrid, List, Store, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cartContext";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
@@ -136,6 +136,11 @@ const Menu = () => {
     return ShoppingCart;
   }, []);
 
+  // Handle image errors
+  const handleImageError = useCallback((itemId: string) => {
+    setImageErrors(prev => new Set([...prev, itemId]));
+  }, []);
+
   // Optimized add to cart with feedback
   const handleAddToCart = useCallback((item: MenuItem) => {
     // Check if store is open
@@ -162,6 +167,19 @@ const Menu = () => {
     setCustomizationProduct(item);
     setIsCustomizationOpen(true);
   }, []);
+
+  // Handle add button click - check for options first
+  const handleAddButtonClick = useCallback((item: MenuItem) => {
+    if (!storeIsOpen) {
+      toast.error('🔒 Desculpe, a loja está fechada no momento. Não é possível adicionar itens ao carrinho.', {
+        duration: 4000,
+      });
+      return;
+    }
+
+    // Show customization dialog to check for options
+    handleProductClick(item);
+  }, [storeIsOpen, handleProductClick]);
 
   // Handle adding product with options to cart
   const handleAddWithOptions = useCallback((selectedOptions: SelectedOption[]) => {
@@ -317,20 +335,71 @@ const Menu = () => {
   }
 
   return (
-    <div className="min-h-screen relative pb-24">
-      {/* Background - Image on mobile, solid yellow on desktop */}
-      <div className="fixed inset-0 md:bg-yellow-400">
-        {/* Mobile background image */}
-        <div 
-          className="md:hidden absolute inset-0 bg-cover bg-top bg-no-repeat"
-          style={{
-            backgroundImage: `url(${bckMenuImage})`,
-          }}
-        />
+    <div className="min-h-screen relative pb-24 bg-gradient-to-br from-purple-400 via-purple-300 to-indigo-400">
+      {/* Mobile Header - Sticky (56px) */}
+      <div className="fixed top-0 left-0 right-0 z-50 md:hidden bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500 shadow-lg border-b-4 border-purple-400">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between h-14">
+          {/* Logo */}
+          <img src={logo} alt="Colorido" className="h-10 w-auto rounded-lg shadow-md" />
+          
+          {/* Center: Title */}
+          <div className="flex-1 text-center">
+            <h1 className="text-white font-bold text-sm truncate">Cardápio</h1>
+          </div>
+          
+          {/* Right: Cart Badge + Menu */}
+          <div className="flex items-center gap-2">
+            {/* Cart Badge */}
+            {getTotalItems() > 0 && (
+              <div className="bg-white text-purple-600 border-2 border-purple-300 shadow-lg animate-pulse-badge px-2.5 py-1 rounded-full font-bold text-xs flex items-center gap-1">
+                <ShoppingCart className="w-4 h-4" />
+                <span>{getTotalItems()}</span>
+              </div>
+            )}
+            
+            {/* Menu Button */}
+            <button
+              onClick={() => setSelectedCategory(selectedCategory ? null : categorizedItems[0]?.id)}
+              className="p-2 text-white hover:bg-white/20 rounded-full transition-all"
+              aria-label="Menu"
+            >
+              <ChevronDown className={`w-5 h-5 transition-transform ${selectedCategory ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="p-2 text-white hover:bg-white/20 rounded-full transition-all"
+              aria-label="Sair"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        
+        {/* Categories Dropdown - Mobile */}
+        {selectedCategory && categorizedItems.length > 0 && (
+          <div className="bg-white/95 backdrop-blur-sm border-t-2 border-purple-200 max-h-64 overflow-y-auto">
+            <div className="px-4 py-2 space-y-1">
+              {categorizedItems.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => {
+                    handleCategoryScroll(category.id);
+                    setSelectedCategory(null);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-purple-100 transition-colors font-medium text-gray-900 text-sm"
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Header - Desktop: Logo + Categories, Mobile: Background Image */}
-      <div className="fixed top-0 left-0 right-0 z-50 shadow-lg">
+      {/* Header - Desktop: Logo + Categories */}
+      <div className="fixed top-0 left-0 right-0 z-50 shadow-lg hidden md:block">
         {/* Mobile: Header Background Image */}
         <div 
           className="md:hidden bg-cover bg-center bg-no-repeat"
@@ -448,9 +517,77 @@ const Menu = () => {
         </div>
       </div>
 
-      {/* Store Closed Banner */}
+      {/* Header - Desktop: Logo + Categories */}
+      <div className="fixed top-0 left-0 right-0 z-50 shadow-lg hidden md:block">
+        {/* Desktop: Gradient header with logo, title, and categories */}
+        <div className="bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500 shadow-xl border-b-4 border-purple-400">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            {/* Top Row: Logo, Title, Cart, Logout */}
+            <div className="flex items-center justify-between mb-6">
+              {/* Logo and Title */}
+              <div className="flex items-center gap-4">
+                <img 
+                  src={logo} 
+                  alt="Colorido Açaí" 
+                  className="h-16 w-auto drop-shadow-lg"
+                />
+                <h1 className="text-3xl font-bold text-white drop-shadow-md">
+                  Cardápio
+                </h1>
+              </div>
+              
+              {/* Right Side: Cart Badge, View Toggle, and Logout */}
+              <div className="flex items-center gap-4">
+                {/* Cart Badge - Desktop */}
+                {getTotalItems() > 0 && (
+                  <div className="bg-white text-purple-600 border-2 border-purple-300 shadow-lg animate-pulse-badge px-4 py-2 rounded-full font-bold text-base flex items-center gap-2">
+                    <ShoppingCart className="w-5 h-5" />
+                    <span>{getTotalItems()}</span>
+                  </div>
+                )}
+                
+                <button
+                  onClick={toggleViewMode}
+                  className="p-2.5 text-white hover:text-white/80 hover:bg-white/20 rounded-full transition-all"
+                  aria-label={viewMode === 'grid' ? 'Mudar para lista' : 'Mudar para grade'}
+                  title={viewMode === 'grid' ? 'Mudar para lista' : 'Mudar para grade'}
+                >
+                  {viewMode === 'grid' ? <List className="w-6 h-6" /> : <LayoutGrid className="w-6 h-6" />}
+                </button>
+                
+                <button
+                  onClick={handleLogout}
+                  className="p-2.5 text-white hover:text-white/80 hover:bg-white/20 rounded-full transition-all"
+                  aria-label="Sair"
+                >
+                  <LogOut className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Store Closed Banner - Mobile Optimized */}
       {!storeIsOpen && !storeStatusLoading && (
-        <div className="fixed top-[180px] md:top-[120px] left-0 right-0 p-4 z-40 animate-in slide-in-from-top duration-300">
+        <div className="fixed top-14 md:top-20 left-0 right-0 p-3 z-40 animate-in slide-in-from-top duration-300 md:hidden">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-3 px-4 rounded-xl shadow-lg border-2 border-red-400">
+              <div className="flex items-center justify-center gap-2">
+                <Store className="h-5 w-5" />
+                <div className="text-center">
+                  <p className="font-bold text-sm">Loja Fechada</p>
+                  <p className="text-xs text-red-100">Não estamos aceitando pedidos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Store Closed Banner */}
+      {!storeIsOpen && !storeStatusLoading && (
+        <div className="hidden md:block fixed top-20 left-0 right-0 p-4 z-40 animate-in slide-in-from-top duration-300">
           <div className="max-w-2xl mx-auto">
             <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-6 rounded-2xl shadow-2xl border-2 border-red-400">
               <div className="flex items-center justify-center gap-3">
@@ -465,13 +602,33 @@ const Menu = () => {
         </div>
       )}
 
-      {/* Cart Button - Top Position */}
+      {/* Cart Button - Mobile Optimized */}
       {cartState.items.length > 0 && storeIsOpen && (
-        <div className="fixed top-[180px] md:top-[120px] left-0 right-0 p-4 z-30 animate-in slide-in-from-top duration-300">
+        <div className="fixed top-14 md:top-20 left-0 right-0 p-3 z-30 animate-in slide-in-from-top duration-300 md:hidden">
           <div className="max-w-2xl mx-auto">
             <Button
               onClick={goToCheckout}
-              className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-4 rounded-2xl font-bold text-base shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all active:scale-95"
+            >
+              <div className="flex items-center justify-between w-full px-2">
+                <div className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  <span>Ver Carrinho ({getTotalItems()})</span>
+                </div>
+                <span className="font-bold">R$ {getTotalPrice().toFixed(2)}</span>
+              </div>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Cart Button */}
+      {cartState.items.length > 0 && storeIsOpen && (
+        <div className="hidden md:block fixed top-20 left-0 right-0 p-4 z-30 animate-in slide-in-from-top duration-300">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              onClick={goToCheckout}
+              className="w-full bg-gradient-to-r from-purple-500 to-purple-400 hover:from-purple-600 hover:to-purple-500 text-white py-4 rounded-2xl font-bold text-base shadow-lg hover:shadow-xl transition-all"
             >
               <div className="flex items-center justify-between w-full px-2">
                 <div className="flex items-center gap-3">
@@ -486,9 +643,9 @@ const Menu = () => {
       )}
 
       {/* Menu Content - Adjusted padding for fixed header and cart */}
-      <div className={`relative z-10 max-w-2xl lg:max-w-6xl mx-auto px-4 pb-8 ${
-        !storeIsOpen ? 'pt-64 md:pt-52' : 
-        cartState.items.length > 0 ? 'pt-64 md:pt-52' : 'pt-48 md:pt-36'
+      <div className={`relative z-10 max-w-2xl lg:max-w-6xl mx-auto px-3 pb-8 ${
+        !storeIsOpen ? 'pt-56 md:pt-52' : 
+        cartState.items.length > 0 ? 'pt-56 md:pt-52' : 'pt-40 md:pt-36'
       }`}>
         {categorizedItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">
@@ -501,14 +658,14 @@ const Menu = () => {
             <div className="md:hidden space-y-6">
               {categorizedItems.map((category) => (
                 <div key={category.id} id={`category-${category.id}`} className="space-y-4 scroll-mt-20">
-                  {/* Category Header - Purple Badge Style */}
-                  <div className="bg-gradient-to-r from-purple-700 to-purple-600 text-white px-4 py-2 rounded-full inline-block shadow-md">
-                    <h2 className="text-sm font-bold uppercase tracking-wide">
+                  {/* Category Header - Mobile Optimized */}
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-400 text-white px-3 py-1.5 rounded-full inline-block shadow-md border-2 border-purple-300">
+                    <h2 className="text-xs font-bold uppercase tracking-wider">
                       {category.name}
                     </h2>
                   </div>
 
-                  {/* Category Items - Clean Cards */}
+                  {/* Category Items - Mobile Optimized Cards */}
                   <SortableProductList
                     items={category.items}
                     categoryId={category.id}
@@ -526,69 +683,69 @@ const Menu = () => {
                             isSortingMode={isSortingMode}
                           >
                             <div 
-                              className="bg-white rounded-2xl p-4 shadow-md hover:shadow-lg transition-all flex gap-4"
+                              className="bg-white rounded-2xl p-3 shadow-md hover:shadow-lg transition-all flex gap-3 active:scale-95"
                             >
-                      {/* Image - Left Side */}
+                      {/* Image - Left Side - Larger for mobile */}
                       <div 
-                        className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 cursor-pointer"
+                        className="w-28 h-28 rounded-xl overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 flex-shrink-0 cursor-pointer border-2 border-purple-100"
                         onClick={() => setSelectedItem(item)}
                       >
                         {item.image_url && !hasImageError ? (
                           <img
                             src={item.image_url}
                             alt={item.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                             onError={() => handleImageError(item.id)}
                             loading="lazy"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-purple-50">
-                            <ShoppingCart className="w-10 h-10 text-purple-400" />
+                            <IceCream className="w-12 h-12 text-purple-300" />
                           </div>
                         )}
                       </div>
 
                       {/* Right Column - Info and Actions */}
-                      <div className="flex-1 flex flex-col min-w-0">
+                      <div className="flex-1 flex flex-col min-w-0 justify-between">
                         {/* Title and Description */}
                         <div 
-                          className="cursor-pointer mb-2"
+                          className="cursor-pointer mb-1"
                           onClick={() => setSelectedItem(item)}
                         >
-                          <h3 className="font-bold text-gray-900 text-base mb-1">
+                          <h3 className="font-bold text-gray-900 text-sm mb-0.5 line-clamp-2">
                             {item.name}
                           </h3>
                           {item.description && (
-                            <p className="text-xs text-gray-600 line-clamp-2">
+                            <p className="text-xs text-gray-600 line-clamp-1">
                               {item.description}
                             </p>
                           )}
                         </div>
 
                         {/* Price and Button Row */}
-                        <div className="flex items-center justify-between gap-3 mt-auto">
-                          <p className="text-purple-600 font-bold text-lg">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-purple-600 font-bold text-base">
                             R$ {item.price.toFixed(2)}
                           </p>
                           
-                          {/* Add/Quantity Controls */}
+                          {/* Add/Quantity Controls - Touch Friendly */}
                           <div className="flex-shrink-0">
                             {quantity > 0 ? (
-                              <div className="flex items-center gap-2 bg-purple-50 rounded-xl p-2">
+                              <div className="flex items-center gap-1.5 bg-purple-100 rounded-lg p-1.5">
                                 <button
                                   onClick={() => removeItem(item.id)}
-                                  className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className="w-9 h-9 rounded-md bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                                   aria-label="Remover um"
                                   disabled={isSortingMode || !storeIsOpen}
                                 >
                                   <Minus className="w-4 h-4" />
                                 </button>
-                                <span className="font-bold text-purple-900 text-lg min-w-[24px] text-center">
+                                <span className="font-bold text-purple-900 text-base min-w-[28px] text-center">
                                   {quantity}
                                 </span>
                                 <button
                                   onClick={() => handleAddToCart(item)}
-                                  className="w-8 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className="w-9 h-9 rounded-md bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                                   aria-label="Adicionar mais"
                                   disabled={isSortingMode || !storeIsOpen}
                                 >
@@ -597,8 +754,8 @@ const Menu = () => {
                               </div>
                             ) : (
                               <Button
-                                onClick={() => handleAddToCart(item)}
-                                className={`bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all ${(isSortingMode || !storeIsOpen) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={() => handleAddButtonClick(item)}
+                                className={`bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-md hover:shadow-lg transition-all active:scale-95 ${(isSortingMode || !storeIsOpen) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={isSortingMode || !storeIsOpen}
                               >
                                 {!storeIsOpen ? 'Fechado' : 'Adicionar'}

@@ -364,6 +364,126 @@ All colors MUST be HSL.
     }
   }
 
+  /* ============================================
+     MOBILE UX/UI IMPROVEMENTS
+     ============================================ */
+
+  /* Mobile-specific touch feedback */
+  @media (hover: none) and (pointer: coarse) {
+    button:hover,
+    a:hover {
+      background-color: inherit;
+    }
+    
+    button:active,
+    a:active {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+  }
+
+  /* Improve mobile scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Ensure minimum touch target size */
+  @media (max-width: 768px) {
+    button,
+    a[role="button"],
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    button + button,
+    a + a {
+      margin-left: 8px;
+    }
+  }
+
+  /* Mobile-optimized text sizing */
+  @media (max-width: 640px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px;
+    }
+    
+    h1 {
+      font-size: 24px;
+    }
+    
+    h2 {
+      font-size: 20px;
+    }
+    
+    h3 {
+      font-size: 18px;
+    }
+    
+    body {
+      font-size: 14px;
+    }
+  }
+
+  /* Mobile-specific spacing */
+  @media (max-width: 640px) {
+    .mobile-padding {
+      padding: 12px;
+    }
+    
+    .mobile-gap-2 {
+      gap: 8px;
+    }
+    
+    .mobile-gap-3 {
+      gap: 12px;
+    }
+  }
+
+  /* Prevent horizontal scroll on mobile */
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Better mobile viewport handling */
+  @supports (-webkit-touch-callout: none) {
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  }
+
+  /* Mobile-optimized shadows */
+  @media (max-width: 640px) {
+    .shadow-md {
+      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .shadow-lg {
+      box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  /* Mobile-optimized animations */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Fast animations for mobile */
+  @media (max-width: 640px) {
+    .transition-all {
+      transition-duration: 200ms;
+    }
+  }
+
   /* Responsive spacing adjustments for payment page - compact mode */
   @media (max-height: 700px) {
     /* Reduce container padding from p-4 (1rem) to p-3 (0.75rem) */

@@ -299,7 +299,9 @@ const Dashboard = () => {
           </div>
 
           <div className="p-6 border-t border-gray-200 flex justify-center">
-            <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white">
+            <Button 
+              onClick={() => navigate('/reports')}
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white">
               Ver Todos os Pedidos
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

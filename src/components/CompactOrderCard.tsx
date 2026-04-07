@@ -5,10 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { OrderCardInfo } from "@/components/OrderCardInfo";
 import type { OrderStatus, PaymentStatus } from "@/components/StatusBadge";
-import { ChevronDown, ChevronUp, Eye, MessageSquare, Printer, CreditCard } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, MessageSquare, Printer, CreditCard, MessageSquare as NoteIcon } from "lucide-react";
 import type { Order } from "@/integrations/supabase/realtime";
 import { usePrintOrder } from "@/hooks/usePrintOrder";
 import { OrderReceipt } from "@/components/printable/OrderReceipt";
+import SpecialInstructionsCard from "@/components/SpecialInstructionsCard";
 
 interface OrderWithItems extends Order {
   items?: Array<{
@@ -75,6 +76,15 @@ export const CompactOrderCard = ({
               showBoth={false}
               compact={true}
             />
+            {order.special_instructions && (
+              <Badge 
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1"
+                title="Pedido contém observações especiais"
+              >
+                <NoteIcon className="h-3 w-3" />
+                Obs.
+              </Badge>
+            )}
             {unreadMessageCount > 0 && (
               <Badge 
                 variant="destructive" 
@@ -150,6 +160,14 @@ export const CompactOrderCard = ({
                 ))}
               </div>
             </div>
+          )}
+
+          {/* Special Instructions */}
+          {order.special_instructions && (
+            <SpecialInstructionsCard
+              instructions={order.special_instructions}
+              compact={false}
+            />
           )}
 
           {/* Action Buttons */}

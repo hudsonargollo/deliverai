@@ -126,6 +126,12 @@ export const ProductCustomizationDialog = ({
     onOpenChange(false);
   };
 
+  // If no options, add directly
+  const handleAddDirect = () => {
+    onAddToCart([]);
+    onOpenChange(false);
+  };
+
   const totalPrice = calculateTotalPrice();
 
   return (
@@ -313,13 +319,23 @@ export const ProductCustomizationDialog = ({
           >
             Cancelar
           </Button>
-          <Button
-            onClick={handleAddToCart}
-            disabled={isLoading || optionsLoading}
-            className="bg-gradient-to-r from-purple-600 to-indigo-600"
-          >
-            {isLoading ? 'Adicionando...' : 'Adicionar ao Carrinho'}
-          </Button>
+          {optionGroups.length === 0 ? (
+            <Button
+              onClick={handleAddDirect}
+              disabled={isLoading || optionsLoading}
+              className="bg-gradient-to-r from-purple-600 to-indigo-600"
+            >
+              {isLoading ? 'Adicionando...' : 'Adicionar ao Carrinho'}
+            </Button>
+          ) : (
+            <Button
+              onClick={handleAddToCart}
+              disabled={isLoading || optionsLoading}
+              className="bg-gradient-to-r from-purple-600 to-indigo-600"
+            >
+              {isLoading ? 'Adicionando...' : 'Adicionar ao Carrinho'}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

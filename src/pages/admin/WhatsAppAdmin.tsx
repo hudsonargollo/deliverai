@@ -26,7 +26,7 @@ import {
   Send
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { UniformHeader } from '@/components/UniformHeader';
+import { AdminLayout } from '@/layouts/AdminLayout';
 import { WhatsAppErrorLogViewer } from '@/components/WhatsAppErrorLogViewer';
 
 interface ConnectionInfo {
@@ -413,14 +413,10 @@ export default function WhatsAppAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
-      {/* Uniform Header */}
-      <UniformHeader
-        title="WhatsApp"
-      />
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+    <AdminLayout>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
+        {/* Main Content */}
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -684,7 +680,8 @@ export default function WhatsAppAdmin() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
