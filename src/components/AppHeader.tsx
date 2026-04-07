@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ConnectionStatusBadge } from "@/components/ConnectionStatusBadge";
 import { useConnectionMonitor } from "@/components/ConnectionMonitor";
+import { useStoreSettings } from "@/hooks/useStoreSettings";
 import logo from "@/assets/coloridoacai.jpg";
 
 export interface HeaderAction {
@@ -41,6 +42,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { connectionStatus, reconnect } = useConnectionMonitor();
+  const { settings } = useStoreSettings();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -68,8 +70,19 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
   const allActions = [...defaultActions, ...actions];
 
+  // Get header gradient colors from settings
+  const headerStart = settings?.header_gradient_start || '258 90% 66%';
+  const headerEnd = settings?.header_gradient_end || '334 100% 71%';
+  const headerGradient = `hsl(${headerStart}), hsl(${headerEnd})`;
+  const displayLogo = settings?.logo_url || logo;
+
   return (
-    <header className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 lg:bg-orange-500 text-white shadow-2xl">
+    <header 
+      className="text-white shadow-2xl sticky top-0 z-40 transition-all duration-300"
+      style={{
+        background: `linear-gradient(to right, hsl(${headerStart}), hsl(${headerEnd}))`
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-4 sm:py-6">
           {/* Desktop Layout */}
@@ -77,7 +90,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             {/* Left: Logo */}
             <div className="flex items-center">
               <div className="relative">
-                <img src={logo} alt="Coco Loko" className="h-20 w-auto" />
+                <img src={displayLogo} alt="Store Logo" className="h-20 w-auto drop-shadow-lg" />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
               </div>
             </div>
@@ -130,8 +143,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               <div className="flex items-center space-x-3 sm:space-x-4 flex-1">
                 <div className="relative">
                   <img
-                    src={logo}
-                    alt="Coco Loko"
+                    src={displayLogo}
+                    alt="Store Logo"
                     className="h-12 sm:h-16 w-auto drop-shadow-lg"
                   />
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
