@@ -151,8 +151,12 @@ const Checkout = () => {
   };
 
   const handleWhatsAppInput = (value: string) => {
+    // Allow user to type freely, only validate on blur
+    // Just limit to reasonable length
     const digits = value.replace(/\D/g, '');
-    setWhatsapp(digits.slice(0, 11));
+    if (digits.length <= 11) {
+      setWhatsapp(digits);
+    }
   };
 
   // Auto-advance from CONFIRM to NAME (removed - we'll handle this differently)

@@ -288,7 +288,7 @@ const AppWithColors = () => {
         }
       />
       <Route
-        path="/customers"
+        path="/admin/customers"
         element={
           <ProtectedRoute requiredRole="admin">
             <Suspense fallback={<LoadingFallback />}>

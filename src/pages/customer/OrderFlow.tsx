@@ -147,18 +147,18 @@ const OrderFlow = () => {
       {/* Cart Items */}
       <div className="space-y-3 max-h-96 overflow-y-auto">
         {cartState.items.map((item) => (
-          <Card key={item.id} className="p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="font-semibold text-slate-800">{item.name}</h3>
-                <p className="text-sm text-slate-600">
+          <Card key={item.id} className="p-3 md:p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-slate-800 text-sm md:text-base">{item.name}</h3>
+                <p className="text-xs md:text-sm text-slate-600 mt-1">
                   R$ {(item.price * item.quantity).toFixed(2)}
                 </p>
                 {item.selectedOptions && item.selectedOptions.length > 0 && (
-                  <div className="text-xs text-slate-500 mt-1 space-y-0.5">
+                  <div className="text-xs text-slate-500 mt-2 space-y-0.5">
                     {item.selectedOptions.map((opt, idx) => (
-                      <div key={idx}>
-                        {opt.option.name} {opt.quantity > 1 ? `(x${opt.quantity})` : ''}
+                      <div key={idx} className="text-slate-600">
+                        • {opt.option.name} {opt.quantity > 1 ? `(x${opt.quantity})` : ''}
                         {opt.option.price_modifier !== 0 && (
                           <span className="text-green-600 ml-1">
                             +R$ {(opt.option.price_modifier * opt.quantity).toFixed(2)}
@@ -171,17 +171,17 @@ const OrderFlow = () => {
               </div>
 
               {/* Quantity Controls */}
-              <div className="flex items-center gap-2 bg-slate-100 rounded-lg p-1">
+              <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1 flex-shrink-0">
                 <button
                   onClick={() => removeItem(item.id)}
-                  className="p-1 hover:bg-slate-200 rounded transition"
+                  className="p-1 hover:bg-slate-200 rounded transition text-sm"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                <span className="w-6 text-center font-semibold text-sm">{item.quantity}</span>
                 <button
                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  className="p-1 hover:bg-slate-200 rounded transition"
+                  className="p-1 hover:bg-slate-200 rounded transition text-sm"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -190,7 +190,7 @@ const OrderFlow = () => {
               {/* Remove Button */}
               <button
                 onClick={() => removeItem(item.id)}
-                className="p-1 hover:bg-red-100 rounded transition text-red-600"
+                className="p-1 hover:bg-red-100 rounded transition text-red-600 flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -256,7 +256,7 @@ const OrderFlow = () => {
         {/* Name */}
         <div>
           <Label htmlFor="name" className="text-slate-700 font-semibold">
-            Nome Completo *
+            Nome *
           </Label>
           <Input
             id="name"
@@ -265,8 +265,14 @@ const OrderFlow = () => {
               setCustomerInfo({ ...customerInfo, name: e.target.value });
               if (errors.name) setErrors({ ...errors, name: "" });
             }}
+            onBlur={() => {
+              if (customerInfo.name.trim() && !validateCustomerInfo()) {
+                // Re-validate on blur
+              }
+            }}
             placeholder="Seu nome"
             className="mt-2 text-base"
+            autoComplete="name"
           />
           {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
         </div>
@@ -281,12 +287,21 @@ const OrderFlow = () => {
             id="whatsapp"
             value={customerInfo.whatsapp}
             onChange={(e) => {
-              const normalized = normalizePhone(e.target.value);
-              setCustomerInfo({ ...customerInfo, whatsapp: normalized });
-              if (errors.whatsapp) setErrors({ ...errors, whatsapp: "" });
+              const digits = e.target.value.replace(/\D/g, '');
+              if (digits.length <= 11) {
+                setCustomerInfo({ ...customerInfo, whatsapp: digits });
+                if (errors.whatsapp) setErrors({ ...errors, whatsapp: "" });
+              }
+            }}
+            onBlur={() => {
+              if (customerInfo.whatsapp && !validateCustomerInfo()) {
+                // Re-validate on blur
+              }
             }}
             placeholder="(11) 99999-9999"
             className="mt-2 text-base"
+            autoComplete="tel"
+            maxLength={11}
           />
           {errors.whatsapp && <p className="text-red-600 text-sm mt-1">{errors.whatsapp}</p>}
         </div>

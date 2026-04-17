@@ -386,125 +386,6 @@ const Menu = () => {
 
       {/* Header - Desktop: Logo + Categories */}
       <div className="fixed top-0 left-0 right-0 z-50 shadow-lg hidden md:block">
-        {/* Mobile: Header Background Image */}
-        <div 
-          className="md:hidden bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url(${headerImage})`,
-          }}
-        >
-          <div className="max-w-6xl mx-auto px-4 pt-32 pb-2">
-            {/* Cart Badge - Top Right */}
-            {getTotalItems() > 0 && (
-              <div className="absolute right-16 top-4">
-                <div className="bg-purple-600 text-white border-2 border-purple-300 shadow-lg animate-pulse-badge px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>{getTotalItems()}</span>
-                </div>
-              </div>
-            )}
-            
-            {/* Logout - Top Right */}
-            <button
-              onClick={handleLogout}
-              className="absolute right-4 top-4 p-2 text-white hover:text-gray-200 hover:bg-white/20 rounded-full transition-all backdrop-blur-sm"
-              aria-label="Sair"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-            
-            {/* Category Navigation - Centered on Desktop, Scroll on Mobile */}
-            {categorizedItems.length > 0 && (
-              <div className="relative">
-                <div className="flex items-center justify-start lg:justify-center gap-2 overflow-x-auto lg:overflow-x-visible scrollbar-hide pb-2 px-2 snap-x snap-mandatory lg:snap-none animate-[bounce-right_2s_ease-in-out_1]">
-                  {categorizedItems.map((category) => {
-                    const isSelected = selectedCategory === category.id;
-                    
-                    return (
-                      <button
-                        key={category.id}
-                        onClick={() => handleCategoryScroll(category.id)}
-                        className={`
-                          flex-shrink-0 px-4 py-2 rounded-full transition-all font-medium text-sm snap-start lg:snap-align-none
-                          ${isSelected 
-                            ? 'bg-purple-500 text-white shadow-md' 
-                            : 'bg-white/80 text-gray-700 hover:bg-white shadow-sm backdrop-blur-sm'
-                          }
-                        `}
-                      >
-                        {category.name}
-                      </button>
-                    );
-                  })}
-                  
-                  {/* Sorting Toggle - Mobile */}
-                  {isAdmin && !adminLoading && (
-                    <div className="flex-shrink-0 snap-start">
-                      <SortingToggle
-                        isSortingMode={isSortingMode}
-                        onToggle={toggleSortingMode}
-                        disabled={isSaving}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Desktop: Gradient header with logo, title, and categories */}
-        <div className="hidden md:block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-700 shadow-xl">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            {/* Top Row: Logo, Title, Cart, Logout */}
-            <div className="flex items-center justify-between mb-6">
-              {/* Logo and Title */}
-              <div className="flex items-center gap-4">
-                <img 
-                  src={logo} 
-                  alt="Colorido Açaí" 
-                  className="h-16 w-auto drop-shadow-lg"
-                />
-                <h1 className="text-3xl font-bold text-white drop-shadow-md">
-                  Cardápio
-                </h1>
-              </div>
-              
-              {/* Right Side: Cart Badge, View Toggle, and Logout */}
-              <div className="flex items-center gap-4">
-                {/* Cart Badge - Desktop */}
-                {getTotalItems() > 0 && (
-                  <div className="bg-white text-purple-700 border-2 border-purple-300 shadow-lg animate-pulse-badge px-4 py-2 rounded-full font-bold text-base flex items-center gap-2">
-                    <ShoppingCart className="w-5 h-5" />
-                    <span>{getTotalItems()}</span>
-                  </div>
-                )}
-                
-                <button
-                  onClick={toggleViewMode}
-                  className="p-2.5 text-white hover:text-white/80 hover:bg-white/20 rounded-full transition-all"
-                  aria-label={viewMode === 'grid' ? 'Mudar para lista' : 'Mudar para grade'}
-                  title={viewMode === 'grid' ? 'Mudar para lista' : 'Mudar para grade'}
-                >
-                  {viewMode === 'grid' ? <List className="w-6 h-6" /> : <LayoutGrid className="w-6 h-6" />}
-                </button>
-                
-                <button
-                  onClick={handleLogout}
-                  className="p-2.5 text-white hover:text-white/80 hover:bg-white/20 rounded-full transition-all"
-                  aria-label="Sair"
-                >
-                  <LogOut className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Header - Desktop: Logo + Categories */}
-      <div className="fixed top-0 left-0 right-0 z-50 shadow-lg hidden md:block">
         {/* Desktop: Gradient header with logo, title, and categories */}
         <div className="bg-gradient-to-r from-purple-500 via-purple-400 to-indigo-500 shadow-xl border-b-4 border-purple-400">
           <div className="max-w-7xl mx-auto px-6 py-4">
@@ -550,6 +431,7 @@ const Menu = () => {
                 </button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -630,8 +512,8 @@ const Menu = () => {
 
       {/* Menu Content - Adjusted padding for fixed header and cart */}
       <div className={`relative z-10 max-w-2xl lg:max-w-6xl mx-auto px-3 pb-8 ${
-        !storeIsOpen ? 'pt-56 md:pt-52' : 
-        cartState.items.length > 0 ? 'pt-56 md:pt-52' : 'pt-40 md:pt-36'
+        !storeIsOpen ? 'pt-32 md:pt-28' : 
+        cartState.items.length > 0 ? 'pt-32 md:pt-28' : 'pt-20 md:pt-24'
       }`}>
         {categorizedItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">

@@ -37,29 +37,41 @@ export const useStoreSettings = () => {
   // Update store settings
   const updateSettings = useMutation({
     mutationFn: async (updates: Partial<StoreSettings>) => {
+      if (!settings?.id) {
+        throw new Error('Store settings ID not found');
+      }
+
       const { data, error } = await supabase
         .from('store_settings')
         .update(updates)
-        .eq('id', settings?.id)
+        .eq('id', settings.id)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       return data as StoreSettings;
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['store-settings'], data);
       toast.success('Configurações atualizadas com sucesso!');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error updating settings:', error);
-      toast.error('Erro ao atualizar configurações');
+      const errorMessage = error?.message || 'Erro ao atualizar configurações';
+      toast.error(errorMessage);
     },
   });
 
   // Upload logo
   const uploadLogo = useMutation({
     mutationFn: async (file: File) => {
+      if (!settings?.id) {
+        throw new Error('Store settings ID not found');
+      }
+
       const fileName = `logo-${Date.now()}.${file.name.split('.').pop()}`;
       
       // Upload to Supabase Storage
@@ -78,7 +90,7 @@ export const useStoreSettings = () => {
       const { data: updatedSettings, error: updateError } = await supabase
         .from('store_settings')
         .update({ logo_url: publicUrl })
-        .eq('id', settings?.id)
+        .eq('id', settings.id)
         .select()
         .single();
 
@@ -89,9 +101,10 @@ export const useStoreSettings = () => {
       queryClient.setQueryData(['store-settings'], data);
       toast.success('Logo atualizado com sucesso!');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error uploading logo:', error);
-      toast.error('Erro ao fazer upload do logo');
+      const errorMessage = error?.message || 'Erro ao fazer upload do logo';
+      toast.error(errorMessage);
     },
   });
 

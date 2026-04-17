@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, Plus, Trash2, Copy, Check } from 'lucide-react';
-import { useStoreSettings, type StoreSettings } from '@/hooks/useStoreSettings';
+import { Upload, Copy, Check, RotateCcw } from 'lucide-react';
+import { useStoreSettings } from '@/hooks/useStoreSettings';
 import { toast } from 'sonner';
+import { AdminLayout } from '@/layouts/AdminLayout';
 import logo from '@/assets/coloridoacai.jpg';
 
 // Predefined color palettes
@@ -65,6 +66,21 @@ const COLOR_PALETTES = [
   },
 ];
 
+// Color swatches for quick selection
+const COLOR_SWATCHES = [
+  '0 100% 50%',    // Red
+  '30 100% 50%',   // Orange
+  '60 100% 50%',   // Yellow
+  '120 100% 50%',  // Green
+  '180 100% 50%',  // Cyan
+  '210 100% 50%',  // Blue
+  '280 100% 50%',  // Purple
+  '320 100% 50%',  // Magenta
+  '0 0% 0%',       // Black
+  '0 0% 100%',     // White
+  '0 0% 50%',      // Gray
+];
+
 export const Settings = () => {
   const { settings, isLoading, uploadLogo, isUploading, updateSettings, isUpdating } = useStoreSettings();
   const [copiedColor, setCopiedColor] = useState<string | null>(null);
@@ -77,6 +93,7 @@ export const Settings = () => {
     headerStart: settings?.header_gradient_start || '258 90% 66%',
     headerEnd: settings?.header_gradient_end || '334 100% 71%',
   });
+  const [selectedColorField, setSelectedColorField] = useState<keyof typeof customColors>('primary');
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -107,6 +124,10 @@ export const Settings = () => {
     setCustomColors(prev => ({ ...prev, [key]: value }));
   };
 
+  const applySwatch = (hsl: string) => {
+    handleColorChange(selectedColorField, hsl);
+  };
+
   const saveCustomColors = () => {
     updateSettings({
       primary_color: customColors.primary,
@@ -117,6 +138,18 @@ export const Settings = () => {
       header_gradient_start: customColors.headerStart,
       header_gradient_end: customColors.headerEnd,
     } as any);
+  };
+
+  const resetColors = () => {
+    setCustomColors({
+      primary: settings?.primary_color || '258 90% 66%',
+      secondary: settings?.secondary_color || '334 100% 71%',
+      accent: settings?.accent_color || '258 90% 66%',
+      menuBg: settings?.menu_background_color || '48 100% 98%',
+      menuText: settings?.menu_text_color || '215 28% 17%',
+      headerStart: settings?.header_gradient_start || '258 90% 66%',
+      headerEnd: settings?.header_gradient_end || '334 100% 71%',
+    });
   };
 
   const copyToClipboard = (text: string, id: string) => {
@@ -148,309 +181,242 @@ export const Settings = () => {
   };
 
   if (isLoading) {
-    return <div className="p-8">Carregando configurações...</div>;
+    return (
+      <AdminLayout>
+        <div className="p-8">Carregando configurações...</div>
+      </AdminLayout>
+    );
   }
 
+  const colorFields = [
+    { key: 'primary' as const, label: 'Primária', desc: 'Cor principal da marca' },
+    { key: 'secondary' as const, label: 'Secundária', desc: 'Cor secundária' },
+    { key: 'accent' as const, label: 'Destaque', desc: 'Cor de destaque' },
+    { key: 'menuBg' as const, label: 'Menu BG', desc: 'Fundo do menu' },
+    { key: 'menuText' as const, label: 'Menu Texto', desc: 'Texto do menu' },
+    { key: 'headerStart' as const, label: 'Header Início', desc: 'Gradiente início' },
+    { key: 'headerEnd' as const, label: 'Header Fim', desc: 'Gradiente fim' },
+  ];
+
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-4xl font-bold mb-8 text-gray-900">Configurações da Loja</h1>
+    <AdminLayout>
+      <div className="p-8 max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8 text-gray-900">Configurações</h1>
 
-      {/* Logo Upload Section */}
-      <Card className="p-8 mb-8 border-2 border-purple-200">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Logo da Loja</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Current Logo */}
-          <div>
-            <p className="text-sm font-semibold text-gray-600 mb-4">Logo Atual</p>
-            <div className="bg-gray-100 rounded-lg p-6 flex items-center justify-center min-h-48">
-              <img 
-                src={settings?.logo_url || logo} 
-                alt="Store Logo" 
-                className="max-h-40 max-w-full object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Upload Area */}
-          <div>
-            <p className="text-sm font-semibold text-gray-600 mb-4">Fazer Upload de Novo Logo</p>
-            <label className="border-2 border-dashed border-purple-300 rounded-lg p-8 cursor-pointer hover:border-purple-500 transition-colors flex flex-col items-center justify-center min-h-48 bg-purple-50">
-              <Upload className="w-12 h-12 text-purple-600 mb-3" />
-              <p className="text-sm font-semibold text-gray-700 text-center">
-                Clique para fazer upload ou arraste uma imagem
-              </p>
-              <p className="text-xs text-gray-500 mt-2">PNG, JPG, GIF até 5MB</p>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoUpload}
-                disabled={isUploading}
-                className="hidden"
-              />
-            </label>
-            {isUploading && <p className="text-sm text-purple-600 mt-2">Enviando...</p>}
-          </div>
-        </div>
-      </Card>
-
-      {/* Color Palettes Section */}
-      <Card className="p-8 mb-8 border-2 border-pink-200">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Paletas de Cores Predefinidas</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {COLOR_PALETTES.map((palette) => (
-            <div
-              key={palette.name}
-              className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 transition-colors cursor-pointer bg-white"
-              onClick={() => applyPalette(palette)}
-            >
-              <h3 className="font-bold text-gray-900 mb-1">{palette.name}</h3>
-              <p className="text-xs text-gray-700 mb-3 font-medium">{palette.description}</p>
-              
-              <div className="flex gap-2 mb-3">
-                <div
-                  className="w-8 h-8 rounded border-2 border-gray-300"
-                  style={{ backgroundColor: hslToHex(palette.primary) }}
-                  title="Primary"
-                />
-                <div
-                  className="w-8 h-8 rounded border-2 border-gray-300"
-                  style={{ backgroundColor: hslToHex(palette.secondary) }}
-                  title="Secondary"
-                />
-                <div
-                  className="w-8 h-8 rounded border-2 border-gray-300"
-                  style={{ backgroundColor: hslToHex(palette.accent) }}
-                  title="Accent"
+        {/* Logo Upload Section */}
+        <Card className="p-8 mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+            <span>📸</span> Logo
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Current Logo */}
+            <div>
+              <p className="text-sm font-semibold text-gray-600 mb-4">Atual</p>
+              <div className="bg-gray-100 rounded-lg p-6 flex items-center justify-center min-h-48 border-2 border-gray-200">
+                <img 
+                  src={settings?.logo_url || logo} 
+                  alt="Store Logo" 
+                  className="max-h-40 max-w-full object-contain"
                 />
               </div>
-              
-              <Button
-                size="sm"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                disabled={isUpdating}
-              >
-                Aplicar
-              </Button>
             </div>
-          ))}
-        </div>
-      </Card>
 
-      {/* Custom Color Picker Section */}
-      <Card className="p-8 border-2 border-green-200">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Cores Personalizadas</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {/* Primary Color */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Cor Primária</label>
-            <div className="flex gap-2">
+            {/* Upload Area */}
+            <div>
+              <p className="text-sm font-semibold text-gray-600 mb-4">Upload</p>
+              <label className="border-2 border-dashed border-purple-300 rounded-lg p-8 cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all flex flex-col items-center justify-center min-h-48 bg-purple-50">
+                <Upload className="w-12 h-12 text-purple-600 mb-3" />
+                <p className="text-sm font-semibold text-gray-700 text-center">
+                  Clique ou arraste
+                </p>
+                <p className="text-xs text-gray-500 mt-2">PNG, JPG, GIF até 5MB</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  disabled={isUploading}
+                  className="hidden"
+                />
+              </label>
+              {isUploading && <p className="text-sm text-purple-600 mt-2">Enviando...</p>}
+            </div>
+          </div>
+        </Card>
+
+        {/* Color Palettes Section */}
+        <Card className="p-8 mb-8 border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-white">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+            <span>🎨</span> Paletas
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {COLOR_PALETTES.map((palette) => (
               <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.primary) }}
-              />
-              <input
-                type="text"
-                value={customColors.primary}
-                onChange={(e) => handleColorChange('primary', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.primary, 'primary')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
+                key={palette.name}
+                className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-400 hover:shadow-lg transition-all cursor-pointer bg-white hover:bg-purple-50"
+                onClick={() => applyPalette(palette)}
               >
-                {copiedColor === 'primary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
+                <h3 className="font-bold text-gray-900 mb-1">{palette.name}</h3>
+                <p className="text-xs text-gray-600 mb-3">{palette.description}</p>
+                
+                <div className="flex gap-2 mb-3">
+                  <div
+                    className="w-8 h-8 rounded border-2 border-gray-300 shadow-sm"
+                    style={{ backgroundColor: hslToHex(palette.primary) }}
+                    title="Primary"
+                  />
+                  <div
+                    className="w-8 h-8 rounded border-2 border-gray-300 shadow-sm"
+                    style={{ backgroundColor: hslToHex(palette.secondary) }}
+                    title="Secondary"
+                  />
+                  <div
+                    className="w-8 h-8 rounded border-2 border-gray-300 shadow-sm"
+                    style={{ backgroundColor: hslToHex(palette.accent) }}
+                    title="Accent"
+                  />
+                </div>
+                
+                <Button
+                  size="sm"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs"
+                  disabled={isUpdating}
+                >
+                  Aplicar
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Custom Color Picker Section */}
+        <Card className="p-8 border-2 border-green-200 bg-gradient-to-br from-green-50 to-white">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <span>🎯</span> Cores Personalizadas
+            </h2>
+            <Button
+              onClick={resetColors}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Resetar
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Color Fields */}
+            <div className="lg:col-span-2 space-y-4">
+              {colorFields.map((field) => (
+                <div
+                  key={field.key}
+                  onClick={() => setSelectedColorField(field.key)}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                    selectedColorField === field.key
+                      ? 'border-purple-500 bg-purple-50'
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 rounded-lg border-2 border-gray-300 shadow-sm flex-shrink-0"
+                      style={{ backgroundColor: hslToHex(customColors[field.key]) }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-900">{field.label}</p>
+                      <p className="text-xs text-gray-600">{field.desc}</p>
+                      <p className="text-xs font-mono text-gray-500 mt-1">{customColors[field.key]}</p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        copyToClipboard(customColors[field.key], field.key);
+                      }}
+                      className="p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+                    >
+                      {copiedColor === field.key ? (
+                        <Check className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-gray-700" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Color Swatches */}
+            <div>
+              <p className="text-sm font-bold text-gray-900 mb-3">Paleta Rápida</p>
+              <div className="grid grid-cols-4 gap-2 p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                {COLOR_SWATCHES.map((swatch, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => applySwatch(swatch)}
+                    className="w-full aspect-square rounded-lg border-2 border-gray-300 hover:border-purple-500 hover:shadow-lg transition-all hover:scale-110"
+                    style={{ backgroundColor: hslToHex(swatch) }}
+                    title={swatch}
+                  />
+                ))}
+              </div>
+              <p className="text-xs text-gray-600 mt-3">Clique em uma cor para aplicar ao campo selecionado</p>
             </div>
           </div>
 
-          {/* Secondary Color */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Cor Secundária</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.secondary) }}
-              />
-              <input
-                type="text"
-                value={customColors.secondary}
-                onChange={(e) => handleColorChange('secondary', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.secondary, 'secondary')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'secondary' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
+          {/* Input Field for Manual Entry */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+            <label className="block text-sm font-bold text-gray-900 mb-2">
+              Editar Manualmente (HSL)
+            </label>
+            <input
+              type="text"
+              value={customColors[selectedColorField]}
+              onChange={(e) => handleColorChange(selectedColorField, e.target.value)}
+              placeholder="h s% l%"
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-mono text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none"
+            />
+            <p className="text-xs text-gray-600 mt-2">Formato: hue (0-360) saturation (0-100%) lightness (0-100%)</p>
           </div>
 
-          {/* Accent Color */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Cor de Destaque</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.accent) }}
-              />
-              <input
-                type="text"
-                value={customColors.accent}
-                onChange={(e) => handleColorChange('accent', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.accent, 'accent')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'accent' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
+          {/* Save Buttons */}
+          <div className="flex gap-3 mt-8">
+            <Button
+              onClick={saveCustomColors}
+              disabled={isUpdating}
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3"
+            >
+              {isUpdating ? 'Salvando...' : 'Salvar Cores'}
+            </Button>
+            <Button
+              onClick={resetColors}
+              variant="outline"
+              className="flex-1 font-bold py-3"
+            >
+              Cancelar
+            </Button>
           </div>
+        </Card>
 
-          {/* Menu Background */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Fundo do Menu</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.menuBg) }}
-              />
-              <input
-                type="text"
-                value={customColors.menuBg}
-                onChange={(e) => handleColorChange('menuBg', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.menuBg, 'menuBg')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'menuBg' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Menu Text */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Texto do Menu</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.menuText) }}
-              />
-              <input
-                type="text"
-                value={customColors.menuText}
-                onChange={(e) => handleColorChange('menuText', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.menuText, 'menuText')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'menuText' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Header Gradient Start */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Cabeçalho (Início)</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.headerStart) }}
-              />
-              <input
-                type="text"
-                value={customColors.headerStart}
-                onChange={(e) => handleColorChange('headerStart', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.headerStart, 'headerStart')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'headerStart' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Header Gradient End */}
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-2">Cabeçalho (Fim)</label>
-            <div className="flex gap-2">
-              <div
-                className="w-12 h-12 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: hslToHex(customColors.headerEnd) }}
-              />
-              <input
-                type="text"
-                value={customColors.headerEnd}
-                onChange={(e) => handleColorChange('headerEnd', e.target.value)}
-                placeholder="h s% l%"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm font-mono text-gray-900 placeholder-gray-500"
-              />
-              <button
-                onClick={() => copyToClipboard(customColors.headerEnd, 'headerEnd')}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copiedColor === 'headerEnd' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-700" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex gap-4">
-          <Button
-            onClick={saveCustomColors}
-            disabled={isUpdating}
-            className="bg-green-600 hover:bg-green-700 text-white"
-          >
-            {isUpdating ? 'Salvando...' : 'Salvar Cores Personalizadas'}
-          </Button>
-          <Button
-            onClick={() => setCustomColors({
-              primary: settings?.primary_color || '258 90% 66%',
-              secondary: settings?.secondary_color || '334 100% 71%',
-              accent: settings?.accent_color || '258 90% 66%',
-              menuBg: settings?.menu_background_color || '48 100% 98%',
-              menuText: settings?.menu_text_color || '215 28% 17%',
-              headerStart: settings?.header_gradient_start || '258 90% 66%',
-              headerEnd: settings?.header_gradient_end || '334 100% 71%',
-            })}
-            variant="outline"
-          >
-            Cancelar
-          </Button>
-        </div>
-      </Card>
-
-      {/* Color Format Help */}
-      <Card className="p-6 mt-8 bg-blue-50 border-2 border-blue-200">
-        <h3 className="font-bold text-gray-900 mb-2">Formato de Cores HSL</h3>
-        <p className="text-sm text-gray-700 mb-3">
-          Use o formato HSL (Hue, Saturation, Lightness) para definir cores personalizadas.
-        </p>
-        <ul className="text-sm text-gray-700 space-y-1">
-          <li><strong>Hue (H):</strong> 0-360 (ângulo na roda de cores)</li>
-          <li><strong>Saturation (S):</strong> 0-100% (intensidade da cor)</li>
-          <li><strong>Lightness (L):</strong> 0-100% (claridade da cor)</li>
-        </ul>
-        <p className="text-xs text-gray-600 mt-3">Exemplo: <code className="bg-white px-2 py-1 rounded">258 90% 66%</code></p>
-      </Card>
-    </div>
+        {/* Help Section */}
+        <Card className="p-6 mt-8 bg-blue-50 border-2 border-blue-200">
+          <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+            <span>ℹ️</span> Dica: Formato HSL
+          </h3>
+          <p className="text-sm text-gray-700 mb-2">
+            HSL (Hue, Saturation, Lightness) é um formato intuitivo para cores.
+          </p>
+          <ul className="text-sm text-gray-700 space-y-1">
+            <li><strong>Hue (H):</strong> 0-360 (posição na roda de cores)</li>
+            <li><strong>Saturation (S):</strong> 0-100% (intensidade da cor)</li>
+            <li><strong>Lightness (L):</strong> 0-100% (claridade da cor)</li>
+          </ul>
+          <p className="text-xs text-gray-600 mt-3">Ex: <code className="bg-white px-2 py-1 rounded border border-gray-300">258 90% 66%</code> = Roxo vibrante</p>
+        </Card>
+      </div>
+    </AdminLayout>
   );
 };
 
